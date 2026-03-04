@@ -20,6 +20,8 @@
 		"eslint.workingDirectories": [
 			{ "mode": "auto" }
 		],
-		"eslint.useFlatConfig": true
+		"eslint.useFlatConfig": true,
+		"typescript.tsdk": "geolocalisation-service/.yarn/sdks/typescript/lib",
+		"typescript.enablePromptUseWorkspaceTsdk": true
 	}
 }
