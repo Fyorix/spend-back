@@ -3,6 +3,7 @@ import { IEventHandler } from './event-handler.interface.js';
 import { RedisChannel } from '../../domain/events/redis-channels.enum.js';
 import { NotificationHandler } from './notification.handler.js';
 import { GeolocationUpdatesHandler } from './geolocation-updates.handler.js';
+import { PongHandler } from './pong.handler.js';
 
 @Injectable()
 export class HandlerRegistry {
@@ -12,12 +13,14 @@ export class HandlerRegistry {
   constructor(
     notificationHandler: NotificationHandler,
     geolocationUpdatesHandler: GeolocationUpdatesHandler,
+    pongHandler: PongHandler,
   ) {
     this.handlers.set(RedisChannel.NOTIFICATION, notificationHandler);
     this.handlers.set(
       RedisChannel.GEOLOCATION_UPDATES,
       geolocationUpdatesHandler,
     );
+    this.handlers.set(RedisChannel.GEOLOCATION_PONG, pongHandler);
   }
 
   dispatch(channel: string, data: unknown): void {
