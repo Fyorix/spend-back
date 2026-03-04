@@ -21,7 +21,5 @@
 			{ "mode": "auto" }
 		],
 		"eslint.useFlatConfig": true,
-		"typescript.tsdk": "geolocalisation-service/.yarn/sdks/typescript/lib",
-		"typescript.enablePromptUseWorkspaceTsdk": true
 	}
 }

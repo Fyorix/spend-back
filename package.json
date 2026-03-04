@@ -2,9 +2,17 @@
   "name": "spend-back-root",
   "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "account-service",
+    "file-service",
+    "geolocalisation-service",
+    "user-service",
+    "ws-service"
+  ],
   "scripts": {
-    "install:all": "cd account-service && yarn install && cd ../file-service && yarn install && cd ../geolocalisation-service && yarn install && cd ../user-service && yarn install && cd ../ws-service && yarn install",
-    "dev:all": "npx concurrently -c \"cyan,magenta,yellow,green,blue\" -n \"user,ws,account,file,geoloc\" \"cd user-service && yarn dev\" \"cd ws-service && yarn dev\" \"cd account-service && yarn dev\" \"cd file-service && yarn dev\" \"cd geolocalisation-service && yarn dev\"",
-    "test:all": "cd account-service && yarn test && cd ../file-service && yarn test && cd ../geolocalisation-service && yarn test && cd ../user-service && yarn test && cd ../ws-service && yarn test"
+    "install:all": "yarn install",
+    "dev:all": "npx concurrently -c \"cyan,magenta,yellow,green,blue\" -n \"user,ws,account,file,geoloc\" \"yarn workspace user-service dev\" \"yarn workspace ws-service dev\" \"yarn workspace account-service dev\" \"yarn workspace file-service dev\" \"yarn workspace geolocalisation-service dev\"",
+    "test:all": "yarn workspaces foreach -A run test",
+    "lint:all": "yarn workspaces foreach -A run lint"
   }
 }
