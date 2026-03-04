@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "account-service"
+		},
+		{
+			"path": "file-service"
+		},
+		{
+			"path": "geolocalisation-service"
+		},
+		{
+			"path": "user-service"
+		},
+		{
+			"path": "ws-service"
+		}
+	],
+	"settings": {
+		"eslint.workingDirectories": [
+			{ "mode": "auto" }
+		],
+		"eslint.useFlatConfig": true
+	}
+}

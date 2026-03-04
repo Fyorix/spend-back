@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AppGateway } from './app.gateway';
+import { RedisController } from './redis.controller';
 
 @Module({
   imports: [],
-  controllers: [],
+  controllers: [RedisController],
   providers: [AppGateway],
 })
 export class AppModule {}
