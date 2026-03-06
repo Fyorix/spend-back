@@ -8,7 +8,7 @@ import { RedisChannel } from '../domain/events/redis-channels.enum.js';
 export class EventTestController {
   private readonly logger = new Logger(EventTestController.name);
 
-  constructor(private readonly redisPub: RedisPubService) {}
+  constructor(private readonly redisPub: RedisPubService) { }
 
   @Get('ping-ws')
   @ApiOperation({ summary: 'Send a ping to the WebSocket service via Redis' })
@@ -24,5 +24,21 @@ export class EventTestController {
     });
 
     return { message: 'Ping sent to WebSocket service' };
+  }
+
+  @Get('ping-2')
+  @ApiOperation({ summary: 'Send a targeted ping to a room' })
+  async pingRoom() {
+    this.logger.log('Sending PING-2 to specific room');
+    await this.redisPub.publish(RedisChannel.GEOLOCATION_UPDATES, {
+      event: 'ping-2',
+      payload: {
+        room: 'vip-room',
+        message: 'Exclusive update for VIPs!',
+        sender: 'GeolocalisationService',
+      },
+    });
+
+    return { message: 'Ping-2 sent to room vip-room' };
   }
 }

@@ -37,6 +37,21 @@ export class GeolocationUpdatesHandler implements IEventHandler {
         .catch((err) => this.logger.error('Failed to send PONG', err));
     }
 
+    if (event.event === 'ping-2') {
+      const roomPayload = event.payload as {
+        room: string;
+        message: string;
+        sender: string;
+      };
+      this.logger.log(`Dispatching ping-2 to room: ${roomPayload.room}`);
+      this.wsEmitter.emitToRoom(roomPayload.room, 'ping_room', {
+        message: roomPayload.message,
+        sender: roomPayload.sender,
+        timestamp: new Date().toISOString(),
+      });
+      return;
+    }
+
     this.wsEmitter.broadcast(event.event, event.payload);
   }
 }
