@@ -15,7 +15,8 @@ import { Server, Socket } from 'socket.io';
   },
 })
 export class AppGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
   private readonly logger = new Logger(AppGateway.name);
   private readonly clientNames = new Map<string, string>();
   private readonly roomTransactions = new Map<string, any[]>();
@@ -34,7 +35,9 @@ export class AppGateway
   handleDisconnect(client: Socket): void {
     const username = this.clientNames.get(client.id);
     this.clientNames.delete(client.id);
-    this.logger.log(`Client disconnected: ${client.id} (${username || 'unknown'})`);
+    this.logger.log(
+      `Client disconnected: ${client.id} (${username || 'unknown'})`,
+    );
 
     this.roomTransactions.forEach((transactions, room) => {
       const filtered = transactions.filter((t) => t.username !== username);
@@ -64,7 +67,9 @@ export class AppGateway
     await client.join(payload.room);
     this.clientNames.set(client.id, payload.username);
 
-    this.logger.log(`Client ${client.id} (${payload.username}) joined room: ${payload.room}`);
+    this.logger.log(
+      `Client ${client.id} (${payload.username}) joined room: ${payload.room}`,
+    );
 
     const currentState = this.roomTransactions.get(payload.room) || [];
     client.emit('map_current_state', currentState);
@@ -103,7 +108,8 @@ export class AppGateway
       );
 
       if (existingIndex > -1) {
-        transactions[existingIndex].count = (transactions[existingIndex].count || 1) + 1;
+        transactions[existingIndex].count =
+          (transactions[existingIndex].count || 1) + 1;
       } else {
         transactions.push({ ...payload, count: 1 });
       }

@@ -8,7 +8,7 @@ import { RedisChannel } from '../domain/events/redis-channels.enum.js';
 export class EventTestController {
   private readonly logger = new Logger(EventTestController.name);
 
-  constructor(private readonly redisPub: RedisPubService) { }
+  constructor(private readonly redisPub: RedisPubService) {}
 
   @Get('ping-ws')
   @ApiOperation({ summary: 'Send a ping to the WebSocket service via Redis' })
