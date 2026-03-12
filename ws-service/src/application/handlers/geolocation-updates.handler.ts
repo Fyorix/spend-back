@@ -11,7 +11,7 @@ export class GeolocationUpdatesHandler implements IEventHandler {
   constructor(
     private readonly wsEmitter: WsEmitterService,
     private readonly redisPub: RedisPubService,
-  ) { }
+  ) {}
 
   handle(data: unknown): void {
     const event = data as RedisEvent;
