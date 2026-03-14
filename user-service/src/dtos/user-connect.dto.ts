@@ -1,7 +1,7 @@
 import { IsEmail, IsNotEmpty, IsStrongPassword } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ConnectUserDto {
+export class UserConnectDto {
   @ApiProperty({
     example: 'clement.pasteau@epita.fr',
     required: true,
@@ -11,7 +11,7 @@ export class ConnectUserDto {
   email: string;
 
   @ApiProperty({
-    example: 'password123#!@',
+    example: 'Password123#!@',
     required: true,
   })
   @IsNotEmpty()
@@ -20,7 +20,7 @@ export class ConnectUserDto {
     minLowercase: 1,
     minUppercase: 1,
     minNumbers: 1,
-    minSymbols: 1
+    minSymbols: 1,
   })
   password: string;
 }

@@ -1,6 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { type IUserRepository, USER_REPOSITORY } from '../port/user.repository';
-import { InvalidPasswordException, UserAlreadyExistsException, UserNotFoundException } from '../errors';
+import {
+  InvalidPasswordException,
+  UserAlreadyExistsException,
+  UserNotFoundException,
+} from '../errors';
 import { UserEntity } from '../entities/user.entity';
 
 @Injectable()
@@ -23,12 +27,11 @@ export class UserService {
       throw new UserNotFoundException(userEntity.email);
     }
     if (user.password !== userEntity.password) {
-      throw new InvalidPasswordException("passwords differ");
+      throw new InvalidPasswordException('passwords differ');
     }
   }
 
   public async getUserById(id: string): Promise<UserEntity> {
-
     const user: UserEntity | null = await this.usersRepository.findById(id);
     if (!user) {
       throw new UserNotFoundException('User not found');
@@ -41,7 +44,6 @@ export class UserService {
     if (!user) {
       throw new UserNotFoundException('User not found');
     }
-    await this.usersRepository.delete(id);
+    await this.usersRepository.deleteById(id);
   }
-
 }

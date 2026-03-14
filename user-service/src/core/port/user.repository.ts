@@ -6,5 +6,5 @@ export interface IUserRepository {
   findByEmail(email: string): Promise<UserEntity | null>;
   findById(id: string): Promise<UserEntity | null>;
   save(user: UserEntity): Promise<void>;
-  delete(id: string): Promise<void>;
+  deleteById(id: string): Promise<void>;
 }

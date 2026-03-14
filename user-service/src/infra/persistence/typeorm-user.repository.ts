@@ -5,6 +5,7 @@ import { IUserRepository } from 'src/core/port/user.repository';
 import { UserEntity } from 'src/core/entities/user.entity';
 import { Repository } from 'typeorm';
 import { UserModel } from '../models/user.model';
+import { UserMapper } from '../mappers/user.mapper';
 
 @Injectable()
 export class TypeormUserRepository implements IUserRepository {
@@ -12,18 +13,28 @@ export class TypeormUserRepository implements IUserRepository {
     @InjectRepository(UserModel)
     private readonly baseRepo: Repository<UserModel>,
   ) {}
-  findByEmail(email: string): Promise<UserEntity | null> {
-    return this.baseRepo.findOne({ where: { email } });
+
+  async findByEmail(email: string): Promise<UserEntity | null> {
+    const user = await this.baseRepo.findOne({ where: { email } });
+    if (!user) {
+      return null;
+    }
+    return UserMapper.toDomain(user);
   }
-  findById(id: string): Promise<UserEntity | null> {
-    return this.baseRepo.findOne({ where: { id } });
+
+  async findById(id: string): Promise<UserEntity | null> {
+    const user = await this.baseRepo.findOne({ where: { id } });
+    if (!user) {
+      return null;
+    }
+    return UserMapper.toDomain(user);
   }
-  save(user: UserEntity): Promise<void> {
-    this.baseRepo.save(user);
-    return Promise.resolve();
+
+  async save(user: UserEntity): Promise<void> {
+    await this.baseRepo.save(user);
   }
-  delete(id: string): Promise<void> {
-    this.baseRepo.delete({ id });
-    return Promise.resolve();
+
+  async deleteById(id: string): Promise<void> {
+    await this.baseRepo.delete(id);
   }
 }
