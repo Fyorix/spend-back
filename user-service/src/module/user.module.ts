@@ -36,7 +36,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
-    }
+    },
   ],
   exports: [],
 })

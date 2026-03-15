@@ -14,11 +14,11 @@ export class UserAlreadyExistsException extends Error {
   }
 }
 
-export class InvalidPasswordException extends Error {
+export class InvalidCredentialsException extends Error {
   constructor(email: string) {
-    super(`message: Invalid password for user with email ${email}`);
-    this.name = 'InvalidPasswordException';
-    Object.setPrototypeOf(this, InvalidPasswordException.prototype);
+    super(`message: Invalid credentials for user with email ${email}`);
+    this.name = 'InvalidCredentialsException';
+    Object.setPrototypeOf(this, InvalidCredentialsException.prototype);
   }
 }
 

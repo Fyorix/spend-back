@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import {
-  InvalidPasswordException,
+  InvalidCredentialsException,
   UnexpectedErrorException,
   UserAlreadyExistsException,
   UserNotFoundException,
@@ -26,7 +26,7 @@ export class CatchGlobalFilter implements ExceptionFilter {
     private readonly errorStatusMap: ErrorStatusMap = [
       [UserAlreadyExistsException as ErrorConstructor, HttpStatus.CONFLICT],
       [UserNotFoundException as ErrorConstructor, HttpStatus.NOT_FOUND],
-      [InvalidPasswordException as ErrorConstructor, HttpStatus.UNAUTHORIZED],
+      [InvalidCredentialsException as ErrorConstructor, HttpStatus.UNAUTHORIZED],
       [
         UnexpectedErrorException as ErrorConstructor,
         HttpStatus.INTERNAL_SERVER_ERROR,

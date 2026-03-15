@@ -17,6 +17,13 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U postgres -d spend'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
 volumes:
   redis_data:
   postgres_data:
+  postgres_test_data:

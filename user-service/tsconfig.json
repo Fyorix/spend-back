@@ -26,5 +26,5 @@
     "removeComments": true,
     "allowJs": false
   },
-  "exclude": ["node_modules", "dist", "test"]
+  "exclude": ["node_modules", "dist", "src/test"]
 }

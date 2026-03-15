@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { type IUserRepository, USER_REPOSITORY } from '../port/user.repository';
 import {
-  InvalidPasswordException,
+  InvalidCredentialsException,
   UserAlreadyExistsException,
   UserNotFoundException,
 } from '../errors';
@@ -27,7 +27,7 @@ export class UserService {
       throw new UserNotFoundException(userEntity.email);
     }
     if (user.password !== userEntity.password) {
-      throw new InvalidPasswordException('passwords differ');
+      throw new InvalidCredentialsException('passwords differ');
     }
   }
 

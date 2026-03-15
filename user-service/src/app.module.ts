@@ -8,12 +8,13 @@ import {
 } from './config/database.config';
 import { UserModule } from './module/user.module';
 
+const isRuntimeEnvConfig =
+  process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot(
-      process.env.NODE_ENV === 'production'
-        ? DATABASE_PROD_CONFIG
-        : DATABASE_DEV_CONF,
+      isRuntimeEnvConfig ? DATABASE_PROD_CONFIG : DATABASE_DEV_CONF,
     ),
     UserModule,
   ],
