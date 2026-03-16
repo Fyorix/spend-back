@@ -1,0 +1,1 @@
+export const ACCESS_TOKEN_DURATION = Symbol('ACCESS_TOKEN_DURATION');

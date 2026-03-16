@@ -96,3 +96,6 @@ dist/
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Vscode color theme settings
+.vscode/settings.json

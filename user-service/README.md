@@ -1,98 +1,123 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# User Service
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+User Service is a NestJS microservice responsible for user management and authentication token issuance.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## What this service does
 
-## Description
+- Registers users
+- Authenticates users by email and password
+- Issues JWT access tokens
+- Fetches and deletes users by id
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Architecture overview
 
-## Project setup
+The implementation follows a layered structure inspired by clean architecture:
+
+- `src/controllers`: HTTP entrypoints and OpenAPI annotations
+- `src/core`: business logic, domain entities, domain errors, repository ports
+- `src/infra`: TypeORM models, mappers, and repository implementation
+- `src/module`: Nest module wiring and dependency injection tokens/constants
+- `src/auth`: authentication guard and `@Public` decorator
+
+Main flow:
+
+1. Controller receives request and delegates to service.
+2. Service uses repository port (`IUserRepository`) from `src/core/port`.
+3. Infra repository (`TypeormUserRepository`) implements the port with TypeORM.
+4. Global exception filter maps domain errors to HTTP statuses.
+
+## Authentication and endpoint protection
+
+All endpoints are protected by default.
+
+Why:
+
+- `APP_GUARD` is registered with `AuthGuard` in `src/module/user.module.ts`.
+- That makes guard evaluation global for all routes in the module.
+
+How to make an endpoint public:
+
+- Add `@Public()` on the controller method (or controller class).
+- `@Public()` sets metadata key `isPublic`.
+- `AuthGuard` checks that metadata and skips JWT validation when present.
+
+In short:
+
+- Default: protected route, requires `Authorization: Bearer <token>`
+- With `@Public()`: route is accessible without token
+
+## Error handling
+
+Global error handling is implemented by `CatchGlobalFilter`.
+
+- Nest `HttpException` keeps its own status code.
+- Domain errors are mapped to status codes through an error map.
+- Unknown errors return `500 Internal Server Error`.
+
+The filter also logs request context and error details with info/debug/error levels.
+
+## Configuration
+
+Environment variables used by this service:
+
+- `PORT`: HTTP server port (default: `3004`)
+- `ACCESS_TOKEN_DURATION`: JWT access token duration in seconds (default: `300`)
+- `JWT_SECRET`: signing secret used by `JwtModule`
+
+Config is loaded in `src/config/env.config.ts`.
+
+## Toolchain versions
+
+Confirmed in this environment:
+
+- Node.js: `v24.14.0`
+- Yarn: `4.12.0`
+
+## Local development
+
+Run commands from the repository root (`spend-back`) using Yarn workspaces.
+
+Install dependencies:
 
 ```bash
-$ yarn install
+yarn install
 ```
 
-## Compile and run the project
+Run in dev mode:
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+yarn workspace user-service dev
 ```
 
-## Run tests
+Build:
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+yarn workspace user-service build
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Run tests:
 
 ```bash
-$ yarn install -g @nestjs/mau
-$ mau deploy
+yarn workspace user-service test
+yarn workspace user-service test:e2e
+yarn workspace user-service test:cov
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Run lint:
 
-## Resources
+```bash
+yarn workspace user-service lint
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+## API documentation
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Swagger is enabled in bootstrap.
 
-## Support
+- OpenAPI UI path: `/api`
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Notes for contributors
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- Keep controller logic thin.
+- Put business rules in services under `src/core/services`.
+- Depend on repository ports in core, not TypeORM repository directly.
+- Keep mapping between domain and persistence in `src/infra/mappers`.
