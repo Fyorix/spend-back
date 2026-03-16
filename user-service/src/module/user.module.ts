@@ -2,15 +2,16 @@ import { Logger, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core';
-import UserController from 'src/controllers/user.controller';
-import { USER_REPOSITORY } from 'src/core/port/user.repository';
-import { AuthService } from 'src/core/services/auth.service';
-import { UserService } from 'src/core/services/user.service';
-import { loadEnvConfig } from 'src/config/env.config';
-import { UserModel } from 'src/infra/models/user.model';
-import { TypeormUserRepository } from 'src/infra/persistence/typeorm-user.repository';
-import { ACCESS_TOKEN_DURATION } from './user.constants';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { UserController } from '../controllers/user.controller.js';
+import { UserGrpcController } from '../controllers/user.grpc.controller.js';
+import { USER_REPOSITORY } from '../core/port/user.repository.js';
+import { AuthService } from '../core/services/auth.service.js';
+import { UserService } from '../core/services/user.service.js';
+import { loadEnvConfig } from '../config/env.config.js';
+import { UserModel } from '../infra/models/user.model.js';
+import { TypeormUserRepository } from '../infra/persistence/typeorm-user.repository.js';
+import { ACCESS_TOKEN_DURATION } from './user.constants.js';
+import { AuthGuard } from '../auth/auth.guard.js';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
       secret: process.env.JWT_SECRET || 'dev-jwt-secret',
     }),
   ],
-  controllers: [UserController],
+  controllers: [UserController, UserGrpcController],
   providers: [
     Logger,
     UserService,

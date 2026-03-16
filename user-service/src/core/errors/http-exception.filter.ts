@@ -12,7 +12,7 @@ import {
   UnexpectedErrorException,
   UserAlreadyExistsException,
   UserNotFoundException,
-} from './user.errors';
+} from './user.errors.js';
 
 type ErrorConstructor<T extends Error = Error> = new (...args: unknown[]) => T;
 type ErrorStatusMap = ReadonlyArray<readonly [ErrorConstructor, number]>;
@@ -26,7 +26,10 @@ export class CatchGlobalFilter implements ExceptionFilter {
     private readonly errorStatusMap: ErrorStatusMap = [
       [UserAlreadyExistsException as ErrorConstructor, HttpStatus.CONFLICT],
       [UserNotFoundException as ErrorConstructor, HttpStatus.NOT_FOUND],
-      [InvalidCredentialsException as ErrorConstructor, HttpStatus.UNAUTHORIZED],
+      [
+        InvalidCredentialsException as ErrorConstructor,
+        HttpStatus.UNAUTHORIZED,
+      ],
       [
         UnexpectedErrorException as ErrorConstructor,
         HttpStatus.INTERNAL_SERVER_ERROR,

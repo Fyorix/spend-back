@@ -1,2 +1,2 @@
-export * from './user.errors';
-export * from './http-exception.filter';
+export * from './user.errors.js';
+export * from './http-exception.filter.js';

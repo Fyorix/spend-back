@@ -1,11 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { type IUserRepository, USER_REPOSITORY } from '../port/user.repository';
+import {
+  type IUserRepository,
+  USER_REPOSITORY,
+} from '../port/user.repository.js';
 import {
   InvalidCredentialsException,
   UserAlreadyExistsException,
   UserNotFoundException,
-} from '../errors';
-import { UserEntity } from '../entities/user.entity';
+} from '../errors/index.js';
+import { UserEntity } from '../entities/user.entity.js';
 
 @Injectable()
 export class UserService {

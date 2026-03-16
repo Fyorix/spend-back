@@ -8,12 +8,12 @@ import {
   Post,
 } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
-import { ParseUUIDPipe } from '@nestjs/common/pipes';
+import { ParseUUIDPipe } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UserConnectDto } from '../dtos/user-connect.dto';
-import { UserService } from '../core/services/user.service';
-import { AuthService } from '../core/services/auth.service';
-import { Public } from '../auth/public.decorator';
+import { UserConnectDto } from '../dtos/user-connect.dto.js';
+import { UserService } from '../core/services/user.service.js';
+import { AuthService } from '../core/services/auth.service.js';
+import { Public } from '../auth/public.decorator.js';
 
 @ApiTags('User')
 @Controller('user')

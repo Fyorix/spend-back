@@ -1,14 +1,17 @@
 import { Inject, Injectable, NotImplementedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ACCESS_TOKEN_DURATION } from '../../module/user.constants';
-import { TokenResponseDto } from '../../dtos/token-response.dto';
-import { type IUserRepository, USER_REPOSITORY } from '../port/user.repository';
-import { UserEntity } from '../entities/user.entity';
+import { ACCESS_TOKEN_DURATION } from '../../module/user.constants.js';
+import { TokenResponseDto } from '../../dtos/token-response.dto.js';
+import {
+  type IUserRepository,
+  USER_REPOSITORY,
+} from '../port/user.repository.js';
+import { UserEntity } from '../entities/user.entity.js';
 import {
   InvalidCredentialsException,
   UnexpectedErrorException,
-} from '../errors';
-import { UserConnectDto } from '../../dtos/user-connect.dto';
+} from '../errors/index.js';
+import { UserConnectDto } from '../../dtos/user-connect.dto.js';
 
 @Injectable()
 export class AuthService {
@@ -18,9 +21,7 @@ export class AuthService {
     @Inject(USER_REPOSITORY) private readonly userRepository: IUserRepository,
   ) {}
 
-  async login(
-    userConnectDto: UserConnectDto,
-  ): Promise<TokenResponseDto> {
+  async login(userConnectDto: UserConnectDto): Promise<TokenResponseDto> {
     const user: UserEntity | null = await this.userRepository.findByEmail(
       userConnectDto.email,
     );
