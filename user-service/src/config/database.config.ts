@@ -1,5 +1,5 @@
 import { type TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { UserModel } from 'src/infra/models/user.model';
+import { UserModel } from '../infra/models/user.model.js';
 
 const DB_DEFAULTS: Partial<TypeOrmModuleOptions> = {
   type: 'postgres',

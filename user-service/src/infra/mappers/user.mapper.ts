@@ -1,5 +1,5 @@
-import { UserEntity } from 'src/core/entities/user.entity';
-import { UserModel } from '../models/user.model';
+import { UserEntity } from '../../core/entities/user.entity.js';
+import { UserModel } from '../models/user.model.js';
 
 export class UserMapper {
   public static toDomain(model: UserModel): UserEntity {

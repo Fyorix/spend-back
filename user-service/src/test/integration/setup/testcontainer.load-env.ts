@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import fs from 'fs';
-import { TESTCONTAINER_STATE_FILE } from './testcontainer.state';
+import { TESTCONTAINER_STATE_FILE } from './testcontainer.state.js';
 
 type ContainerState = {
   containerId: string;
