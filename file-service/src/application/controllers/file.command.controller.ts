@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/require-await */
-import { Controller, NotImplementedException } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
+import { Controller, Logger, NotImplementedException } from '@nestjs/common';
+import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
 import {
   FILE_SERVICE_NAME,
   type UploadFileRequest,
@@ -13,17 +13,19 @@ import { Observable } from 'rxjs';
 
 @Controller()
 export class FileCommandController {
-  constructor() {}
+  constructor() { }
 
-  @GrpcMethod(FILE_SERVICE_NAME, 'UploadFile')
+  @GrpcStreamMethod(FILE_SERVICE_NAME, 'UploadFile')
   async uploadFile(
     _request: Observable<UploadFileRequest>,
   ): Promise<FileResponse> {
+    Logger.log('UPLOAD FILE NOT IMPLEMENTED');
     throw new NotImplementedException();
   }
 
   @GrpcMethod(FILE_SERVICE_NAME, 'DeleteFile')
   async deleteFile(_request: DeleteFileRequest): Promise<EmptyResponse> {
+    Logger.log('DELETE FILE NOT IMPLEMENTED');
     throw new NotImplementedException();
   }
 }
