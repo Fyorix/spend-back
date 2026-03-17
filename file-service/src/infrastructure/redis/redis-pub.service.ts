@@ -1,5 +1,5 @@
 import { Injectable, Inject, Logger } from '@nestjs/common';
-import Redis from 'ioredis';
+import { Redis } from 'ioredis';
 import { REDIS_PUBLISHER } from './redis.constants.js';
 
 @Injectable()

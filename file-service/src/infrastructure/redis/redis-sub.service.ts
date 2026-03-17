@@ -5,7 +5,7 @@ import {
   OnModuleDestroy,
   Logger,
 } from '@nestjs/common';
-import Redis from 'ioredis';
+import { Redis } from 'ioredis';
 import { REDIS_SUBSCRIBER } from './redis.constants.js';
 import { HandlerRegistry } from '../../application/handlers/handler.registry.js';
 import { RedisChannel } from '../../domain/events/redis-channels.enum.js';
