@@ -1,6 +1,6 @@
 import { createRequire } from 'module';
 import { join } from 'path';
-import { MicroserviceOptions } from '@nestjs/microservices';
+import { GrpcOptions } from '@nestjs/microservices';
 import { GEOLOCATION_PACKAGE_NAME } from '@clement.pasteau/contracts';
 
 const require = createRequire(import.meta.url);
@@ -9,7 +9,7 @@ const contractsPath = join(
   '..',
 );
 
-export const geolocationGrpcConfig: MicroserviceOptions['options'] = {
+export const geolocationGrpcConfig: GrpcOptions['options'] = {
   package: GEOLOCATION_PACKAGE_NAME,
   protoPath: join(
     contractsPath,
