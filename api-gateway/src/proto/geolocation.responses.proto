@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package geolocation;
+import "geolocation/geolocation.proto";
+
+message TrackTransactionResponse {
+  bool success = 1;
+  string message = 2;
+  double latitude = 3;
+  double longitude = 4;
+}
+
+message GetNearbyTransactionsResponse {
+  repeated TransactionPoint transactions = 1;
+}
+
+message AutocompleteResponse {
+  repeated string suggestions = 1;
+}
