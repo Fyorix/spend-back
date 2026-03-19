@@ -1,26 +1,16 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { EventTestController } from './application/event-test.controller.js';
-import { AppService } from './app.service';
-import { RedisModule } from './infrastructure/redis/redis.module';
-import { RedisPubService } from './infrastructure/redis/redis-pub.service';
-import { RedisSubService } from './infrastructure/redis/redis-sub.service';
-import { HandlerRegistry } from './application/handlers/handler.registry';
-import { NotificationHandler } from './application/handlers/notification.handler';
-import { GeolocationUpdatesHandler } from './application/handlers/geolocation-updates.handler';
-import { PongHandler } from './application/handlers/pong.handler';
+import { GeolocationController } from './application/controllers/geolocation.controller.js';
+import { GeolocationApplicationService } from './application/services/geolocation.application.service.js';
+import { GeocodingService } from './infrastructure/geocoding/geocoding.service.js';
+import { RedisGeolocationRepository } from './infrastructure/redis/redis.repository.js';
 
 @Module({
-  imports: [RedisModule],
-  controllers: [AppController, EventTestController],
+  imports: [],
+  controllers: [GeolocationController],
   providers: [
-    AppService,
-    RedisPubService,
-    RedisSubService,
-    HandlerRegistry,
-    NotificationHandler,
-    GeolocationUpdatesHandler,
-    PongHandler,
+    GeolocationApplicationService,
+    GeocodingService,
+    RedisGeolocationRepository,
   ],
 })
 export class AppModule {}
