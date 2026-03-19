@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ClientsModule, GrpcOptions, Transport } from '@nestjs/microservices';
 import { GeolocationGatewayController } from './application/controllers/geolocation.gateway.controller.js';
 import { geolocationGrpcConfig } from './config/grpc.config.js';
 
@@ -9,7 +9,7 @@ import { geolocationGrpcConfig } from './config/grpc.config.js';
       {
         name: 'GEOLOCATION_PACKAGE',
         transport: Transport.GRPC,
-        options: geolocationGrpcConfig as any,
+        options: geolocationGrpcConfig as GrpcOptions['options'],
       },
     ]),
   ],
