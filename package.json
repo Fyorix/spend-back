@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
+    "api-gateway",
     "account-service",
     "file-service",
     "geolocalisation-service",
@@ -14,5 +15,11 @@
     "dev:all": "npx concurrently -c \"cyan,magenta,yellow,green,blue\" -n \"user,ws,account,file,geoloc\" \"yarn workspace user-service dev\" \"yarn workspace ws-service dev\" \"yarn workspace account-service dev\" \"yarn workspace file-service dev\" \"yarn workspace geolocalisation-service dev\"",
     "test:all": "yarn workspaces foreach -A run test",
     "lint:all": "yarn workspaces foreach -A run lint"
+  },
+  "dependencies": {
+    "@clement.pasteau/contracts": "0.7.2"
+  },
+  "installConfig": {
+    "hoistingLimits": "workspaces"
   }
 }

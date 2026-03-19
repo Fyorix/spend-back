@@ -1,8 +1,7 @@
 {
-  "name": "geolocalisation-service",
+  "name": "api-gateway",
   "version": "0.0.1",
   "description": "",
-  "author": "",
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
@@ -16,16 +15,15 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"src/**/*.ts\" --fix",
-    "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
-    "test:watch": "NODE_OPTIONS='--experimental-vm-modules' jest --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "test:unit": "NODE_OPTIONS='--experimental-vm-modules' jest --testRegex \".*\\\\.unit\\\\.spec\\\\.ts$\"",
-    "test:int": "NODE_OPTIONS='--experimental-vm-modules' jest --testRegex \".*\\\\.int\\\\.spec\\\\.ts$\""
+    "test:unit": "jest --testRegex \".*\\\\.unit\\\\.spec\\\\.ts$\""
   },
   "dependencies": {
-    "@clement.pasteau/contracts": "0.7.2",
+    "@clement.pasteau/contracts": "0.7.1",
     "@grpc/grpc-js": "^1.14.3",
     "@grpc/proto-loader": "^0.8.0",
     "@nestjs/common": "^11.0.1",
@@ -33,7 +31,6 @@
     "@nestjs/microservices": "^11.1.17",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.6",
-    "ioredis": "^5.10.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "swagger-ui-express": "^5.0.1"
@@ -66,9 +63,6 @@
     "typescript-eslint": "^8.20.0"
   },
   "jest": {
-    "moduleNameMapper": {
-      "^(\\.\\.?/.+)\\.js$": "$1"
-    },
     "moduleFileExtensions": [
       "js",
       "json",
@@ -77,21 +71,12 @@
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|j)s$": [
-        "ts-jest",
-        {
-          "useESM": true
-        }
-      ]
+      "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node",
-    "extensionsToTreatAsEsm": [
-      ".ts"
-    ],
-    "maxWorkers": 1
+    "testEnvironment": "node"
   }
 }

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package geolocation;
+
+message GetNearbyTransactionsRequest {
+  double latitude = 1;
+  double longitude = 2;
+  double radiusKm = 3;
+}
+
+message AutocompleteRequest {
+  string query = 1;
+  string provider = 2;
+}
