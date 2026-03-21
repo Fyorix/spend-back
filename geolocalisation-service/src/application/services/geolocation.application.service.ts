@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { EventTag } from '@clement.pasteau/shared';
 import { GeocodingService } from '../../infrastructure/geocoding/geocoding.service.js';
 import { GeolocalisationRepository } from '../../infrastructure/database/geolocalisation.repository.js';
 import {
@@ -20,7 +21,8 @@ export class GeolocationApplicationService {
     transactionId: string,
     address: string,
     amount: number,
-    provider?: GeocodingProviderType,
+    provider: GeocodingProviderType = GeocodingProviderType.OPEN_STREET_MAP,
+    tag: EventTag,
   ): Promise<Coordinate | null> {
     const coordinate = await this.geocodingService.geocode(address, provider);
     if (!coordinate) {
@@ -32,9 +34,10 @@ export class GeolocationApplicationService {
       transactionId,
       coordinate,
       amount,
+      tag,
     );
     this.logger.log(
-      `Tracked transaction ${transactionId} at ${coordinate.latitude}, ${coordinate.longitude}`,
+      `Tracked transaction ${transactionId} at ${coordinate.latitude}, ${coordinate.longitude} with tag ${tag}`,
     );
     return coordinate;
   }
@@ -43,11 +46,13 @@ export class GeolocationApplicationService {
     latitude: number,
     longitude: number,
     radiusKm: number,
+    tag?: EventTag,
   ): Promise<NearbyTransaction[]> {
     return this.geolocalisationRepository.findNearbyTransactions(
       latitude,
       longitude,
       radiusKm,
+      tag,
     );
   }
 }

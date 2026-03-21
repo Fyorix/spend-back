@@ -2,6 +2,7 @@ import { GeolocationApplicationService } from '../../../application/services/geo
 import { GeocodingService } from '../../../infrastructure/geocoding/geocoding.service.js';
 import { GeolocalisationRepository } from '../../../infrastructure/database/geolocalisation.repository.js';
 import { GeocodingProviderType } from '../../../domain/geocoding/geocoding.provider.js';
+import { EventTag } from '@clement.pasteau/shared';
 import { jest } from '@jest/globals';
 import { createCoordinate } from '../../helpers/factories.js';
 
@@ -36,6 +37,7 @@ describe('GeolocationApplicationService (Unit)', () => {
     const amount = 100.5;
     const coordinate = createCoordinate();
     const provider = GeocodingProviderType.OPEN_STREET_MAP;
+    const tag = EventTag.FOOD;
 
     const geocodeSpy = jest
       .spyOn(mockGeocodingService, 'geocode')
@@ -49,6 +51,7 @@ describe('GeolocationApplicationService (Unit)', () => {
       address,
       amount,
       provider,
+      tag,
     );
 
     expect(result).toEqual(coordinate);
@@ -57,6 +60,7 @@ describe('GeolocationApplicationService (Unit)', () => {
       transactionId,
       coordinate,
       amount,
+      tag,
     );
   });
 
@@ -64,6 +68,7 @@ describe('GeolocationApplicationService (Unit)', () => {
     const transactionId = 'tx-1';
     const address = 'Unknown Address';
     const amount = 100.5;
+    const tag = EventTag.FOOD;
 
     const geocodeSpy = jest
       .spyOn(mockGeocodingService, 'geocode')
@@ -75,10 +80,15 @@ describe('GeolocationApplicationService (Unit)', () => {
       transactionId,
       address,
       amount,
+      GeocodingProviderType.OPEN_STREET_MAP,
+      tag,
     );
 
     expect(result).toBeNull();
-    expect(geocodeSpy).toHaveBeenCalledWith(address, undefined);
+    expect(geocodeSpy).toHaveBeenCalledWith(
+      address,
+      GeocodingProviderType.OPEN_STREET_MAP,
+    );
     expect(addTransactionSpy).not.toHaveBeenCalled();
   });
 
@@ -86,12 +96,14 @@ describe('GeolocationApplicationService (Unit)', () => {
     const lat = 1;
     const lng = 2;
     const radius = 10;
+    const tag = EventTag.FOOD;
     const transactions = [
       {
         transactionId: '1',
         latitude: 1.1,
         longitude: 2.1,
         amount: 100,
+        tag: EventTag.FOOD,
       },
     ];
 
@@ -99,9 +111,9 @@ describe('GeolocationApplicationService (Unit)', () => {
       .spyOn(mockRepository, 'findNearbyTransactions')
       .mockResolvedValue(transactions);
 
-    const result = await service.getNearbyTransactions(lat, lng, radius);
+    const result = await service.getNearbyTransactions(lat, lng, radius, tag);
 
     expect(result).toEqual(transactions);
-    expect(findNearbySpy).toHaveBeenCalledWith(lat, lng, radius);
+    expect(findNearbySpy).toHaveBeenCalledWith(lat, lng, radius, tag);
   });
 });

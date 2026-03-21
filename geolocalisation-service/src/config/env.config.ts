@@ -5,8 +5,6 @@ export interface EnvConfig {
   dbUser: string;
   dbPass: string;
   dbName: string;
-  redisHost: string;
-  redisPort: number;
   googleMapsApiKey: string;
 }
 
@@ -18,8 +16,6 @@ export function loadEnvConfig(): EnvConfig {
     dbUser: process.env.DB_USER || 'postgres',
     dbPass: process.env.DB_PASS || 'password',
     dbName: process.env.DB_NAME || 'spend',
-    redisHost: process.env.REDIS_HOST || 'localhost',
-    redisPort: parseInt(process.env.REDIS_PORT || '6379', 10),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY || '',
   };
 }

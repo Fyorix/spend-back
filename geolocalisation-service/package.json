@@ -9,7 +9,7 @@
   "scripts": {
     "build": "yarn copy-proto && nest build",
     "copy-proto": "mkdir -p src/proto && cp ../../spend-libs/packages/contracts/proto/geolocation/*.proto src/proto/",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\"",
     "start": "nest start",
     "dev": "nest start --watch",
     "start:dev": "nest start --watch",
@@ -25,7 +25,8 @@
     "test:int": "NODE_OPTIONS='--experimental-vm-modules' jest --testRegex \".*\\\\.int\\\\.spec\\\\.ts$\""
   },
   "dependencies": {
-    "@clement.pasteau/contracts": "0.7.2",
+    "@clement.pasteau/contracts": "1.0.0",
+    "@clement.pasteau/shared": "1.0.0",
     "@grpc/grpc-js": "^1.14.3",
     "@grpc/proto-loader": "^0.8.0",
     "@nestjs/common": "^11.0.1",
@@ -35,7 +36,6 @@
     "@nestjs/swagger": "^11.2.6",
     "@nestjs/typeorm": "^11.0.0",
     "geojson": "^0.5.0",
-    "ioredis": "^5.10.0",
     "pg": "^8.20.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",

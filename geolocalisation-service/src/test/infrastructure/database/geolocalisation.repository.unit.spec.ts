@@ -1,4 +1,5 @@
 import { GeolocalisationRepository } from '../../../infrastructure/database/geolocalisation.repository.js';
+import { EventTag } from '@clement.pasteau/shared';
 import { GeolocalisationModel } from '../../../infrastructure/database/models/geolocalisation.model.js';
 import { jest } from '@jest/globals';
 import {
@@ -15,7 +16,9 @@ describe('GeolocalisationRepository (Unit)', () => {
     mockTypeOrmRepository = {
       upsert: jest.fn(),
       createQueryBuilder: jest.fn(),
-    } as unknown as Repository<GeolocalisationModel>;
+    } as Partial<
+      Repository<GeolocalisationModel>
+    > as Repository<GeolocalisationModel>;
 
     repository = new GeolocalisationRepository(mockTypeOrmRepository);
   });
@@ -29,6 +32,7 @@ describe('GeolocalisationRepository (Unit)', () => {
       const transactionId = 'tx-1';
       const coordinate = createCoordinate();
       const amount = 100;
+      const tag = EventTag.FOOD;
 
       const upsertSpy = jest
         .spyOn(mockTypeOrmRepository, 'upsert')
@@ -38,7 +42,7 @@ describe('GeolocalisationRepository (Unit)', () => {
           raw: [],
         } as InsertResult);
 
-      await repository.addTransaction(transactionId, coordinate, amount);
+      await repository.addTransaction(transactionId, coordinate, amount, tag);
 
       expect(upsertSpy).toHaveBeenCalledWith(
         {
@@ -48,6 +52,7 @@ describe('GeolocalisationRepository (Unit)', () => {
             coordinates: [coordinate.longitude, coordinate.latitude],
           },
           amount,
+          tag,
         },
         ['transactionId'],
       );
@@ -59,16 +64,19 @@ describe('GeolocalisationRepository (Unit)', () => {
       const lat = 48.8566;
       const lng = 2.3522;
       const radius = 5;
+      const tag = EventTag.FOOD;
 
       const mockEntity = createGeolocalisationEntity({
         transactionId: 'tx-1',
         amount: 100,
+        tag: EventTag.FOOD,
         location: { type: 'Point', coordinates: [2.3522, 48.8566] },
       });
 
       const mockQueryBuilder = {
         select: jest.fn().mockReturnThis(),
         where: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
         getMany: jest
           .fn<() => Promise<GeolocalisationModel[]>>()
           .mockResolvedValue([mockEntity]),
@@ -77,10 +85,17 @@ describe('GeolocalisationRepository (Unit)', () => {
       const createQueryBuilderSpy = jest
         .spyOn(mockTypeOrmRepository, 'createQueryBuilder')
         .mockReturnValue(
-          mockQueryBuilder as unknown as SelectQueryBuilder<GeolocalisationModel>,
+          mockQueryBuilder as Partial<
+            SelectQueryBuilder<GeolocalisationModel>
+          > as SelectQueryBuilder<GeolocalisationModel>,
         );
 
-      const result = await repository.findNearbyTransactions(lat, lng, radius);
+      const result = await repository.findNearbyTransactions(
+        lat,
+        lng,
+        radius,
+        tag,
+      );
 
       expect(createQueryBuilderSpy).toHaveBeenCalledWith('geo');
       expect(result).toHaveLength(1);
@@ -89,6 +104,7 @@ describe('GeolocalisationRepository (Unit)', () => {
         latitude: 48.8566,
         longitude: 2.3522,
         amount: 100,
+        tag: EventTag.FOOD,
       });
     });
   });

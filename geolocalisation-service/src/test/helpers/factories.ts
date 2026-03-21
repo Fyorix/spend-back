@@ -63,11 +63,11 @@ export const createOsmGeocodeResponse = (
   lat = '48.8566',
   lon = '2.3522',
 ): OsmGeocodeResponse[] => [
-    {
-      lat,
-      lon,
-    },
-  ];
+  {
+    lat,
+    lon,
+  },
+];
 
 export const createOsmAutocompleteResponse = (
   suggestions: string[] = ['Paris, France'],
@@ -90,6 +90,7 @@ export const createMockFetchResponse = (
   }) as unknown as Response;
 
 import { GeolocalisationModel } from '../../infrastructure/database/models/geolocalisation.model.js';
+import { EventTag } from '@clement.pasteau/shared';
 
 export const createGeolocalisationEntity = (
   overrides?: Partial<GeolocalisationModel>,
@@ -102,6 +103,7 @@ export const createGeolocalisationEntity = (
     coordinates: [2.3522, 48.8566],
   };
   entity.amount = 100;
+  entity.tag = EventTag.FOOD;
   entity.createdAt = new Date();
   entity.updatedAt = new Date();
   return Object.assign(entity, overrides);

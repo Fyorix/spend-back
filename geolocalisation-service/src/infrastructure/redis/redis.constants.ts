@@ -1,2 +1,0 @@
-export const REDIS_PUBLISHER = Symbol('REDIS_PUBLISHER');
-export const REDIS_SUBSCRIBER = Symbol('REDIS_SUBSCRIBER');

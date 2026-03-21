@@ -15,51 +15,40 @@ describe('GeocodingService (Unit)', () => {
 
   beforeEach(() => {
     service = new GeocodingService();
-    const internal = service as unknown as { providers: GeocodingProvider[] };
-    googleProvider = internal.providers[0] as GoogleMapsProvider;
-    osmProvider = internal.providers[1] as OpenStreetMapProvider;
+    const internal = service as unknown as {
+      providers: Record<string, GeocodingProvider>;
+    };
+    googleProvider = internal.providers[
+      GeocodingProviderType.GOOGLE_MAPS
+    ] as GoogleMapsProvider;
+    osmProvider = internal.providers[
+      GeocodingProviderType.OPEN_STREET_MAP
+    ] as OpenStreetMapProvider;
   });
 
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  it('should return coordinates from Google Maps if successful', async () => {
+  it('should return coordinates from Google Maps when specified', async () => {
     const address = 'Paris';
     const coordinate = createCoordinate();
     const googleSpy = jest
       .spyOn(googleProvider, 'geocode')
       .mockResolvedValue(coordinate);
 
-    const result = await service.geocode(address);
+    const result = await service.geocode(
+      address,
+      GeocodingProviderType.GOOGLE_MAPS,
+    );
 
     expect(result).toEqual(coordinate);
     expect(googleSpy).toHaveBeenCalledWith(address);
   });
 
-  it('should fallback to OSM if Google Maps fails', async () => {
+  it('should return coordinates from OpenStreetMap when specified', async () => {
     const address = 'Paris';
     const coordinate = createCoordinate();
-    const googleSpy = jest
-      .spyOn(googleProvider, 'geocode')
-      .mockResolvedValue(null);
-    const osmSpy = jest
-      .spyOn(osmProvider, 'geocode')
-      .mockResolvedValue(coordinate);
-
-    const result = await service.geocode(address);
-
-    expect(result).toEqual(coordinate);
-    expect(googleSpy).toHaveBeenCalledWith(address);
-    expect(osmSpy).toHaveBeenCalledWith(address);
-  });
-
-  it('should only use the specified provider when requested', async () => {
-    const address = 'Paris';
-    const coordinate = createCoordinate();
-    const googleSpy = jest
-      .spyOn(googleProvider, 'geocode')
-      .mockResolvedValue(coordinate);
     const osmSpy = jest
       .spyOn(osmProvider, 'geocode')
       .mockResolvedValue(coordinate);
@@ -70,21 +59,35 @@ describe('GeocodingService (Unit)', () => {
     );
 
     expect(result).toEqual(coordinate);
-    expect(googleSpy).not.toHaveBeenCalled();
     expect(osmSpy).toHaveBeenCalledWith(address);
   });
 
-  it('should return null if all providers fail', async () => {
+  it('should return null if the provider fails', async () => {
     const address = 'Unknown';
     const googleSpy = jest
       .spyOn(googleProvider, 'geocode')
       .mockResolvedValue(null);
-    const osmSpy = jest.spyOn(osmProvider, 'geocode').mockResolvedValue(null);
 
-    const result = await service.geocode(address);
+    const result = await service.geocode(
+      address,
+      GeocodingProviderType.GOOGLE_MAPS,
+    );
 
     expect(result).toBeNull();
-    expect(googleSpy).toHaveBeenCalled();
-    expect(osmSpy).toHaveBeenCalled();
+    expect(googleSpy).toHaveBeenCalledWith(address);
+  });
+
+  it('should catch errors from providers and return null', async () => {
+    const address = 'Error';
+    jest
+      .spyOn(googleProvider, 'geocode')
+      .mockRejectedValue(new Error('API Down'));
+
+    const result = await service.geocode(
+      address,
+      GeocodingProviderType.GOOGLE_MAPS,
+    );
+
+    expect(result).toBeNull();
   });
 });

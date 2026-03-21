@@ -2,13 +2,16 @@ services:
   redis:
     image: redis:alpine
     container_name: spend_redis
+    platform: linux/arm64
     ports:
       - "6379:6379"
     command: redis-server --appendonly yes
     volumes:
       - redis_data:/data
   postgres:
-    image: postgres:alpine
+    image: postgis/postgis:16-3.4
+    container_name: spend_postgres
+    platform: linux/amd64
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password

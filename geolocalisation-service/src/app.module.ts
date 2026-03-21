@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { GeolocationController } from './application/controllers/geolocation.controller.js';
 import { GeolocationApplicationService } from './application/services/geolocation.application.service.js';
 import { GeocodingService } from './infrastructure/geocoding/geocoding.service.js';
-import { RedisGeolocationRepository } from './infrastructure/redis/redis.repository.js';
 import { GeolocalisationRepository } from './infrastructure/database/geolocalisation.repository.js';
 import { GeolocalisationModel } from './infrastructure/database/models/geolocalisation.model.js';
 import { loadEnvConfig } from './config/env.config.js';
@@ -28,7 +27,6 @@ const config = loadEnvConfig();
   providers: [
     GeolocationApplicationService,
     GeocodingService,
-    RedisGeolocationRepository,
     GeolocalisationRepository,
   ],
 })

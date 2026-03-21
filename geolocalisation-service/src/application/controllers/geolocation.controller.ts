@@ -8,18 +8,17 @@ import {
   type TrackTransactionResponse,
   type GetNearbyTransactionsRequest,
   type GetNearbyTransactionsResponse,
-  type AutocompleteRequest,
-  type AutocompleteResponse,
 } from '@clement.pasteau/contracts';
 import { GeolocationApplicationService } from '../services/geolocation.application.service.js';
 import { GeocodingProviderType } from '../../domain/geocoding/geocoding.provider.js';
+import { EventTag } from '@clement.pasteau/shared';
 
 @Controller()
 @GeolocationServiceControllerMethods()
 export class GeolocationController implements GeolocationServiceController {
   constructor(
     private readonly geolocationService: GeolocationApplicationService,
-  ) { }
+  ) {}
 
   @GrpcMethod(GEOLOCATION_SERVICE_NAME, 'TrackTransaction')
   async trackTransaction(
@@ -30,6 +29,7 @@ export class GeolocationController implements GeolocationServiceController {
       request.address,
       request.amount,
       request.provider as GeocodingProviderType,
+      request.tag as EventTag,
     );
 
     if (!coordinate) {
@@ -57,6 +57,7 @@ export class GeolocationController implements GeolocationServiceController {
       request.latitude,
       request.longitude,
       request.radiusKm,
+      request.tag ? (request.tag as EventTag) : undefined,
     );
 
     return {
@@ -65,14 +66,8 @@ export class GeolocationController implements GeolocationServiceController {
         latitude: t.latitude,
         longitude: t.longitude,
         amount: t.amount,
+        tag: t.tag || '',
       })),
     };
-  }
-
-  @GrpcMethod(GEOLOCATION_SERVICE_NAME, 'Autocomplete')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  autocomplete(_request: AutocompleteRequest): AutocompleteResponse {
-    // Autocomplete is now handled client-side to reduce latency.
-    return { suggestions: [] };
   }
 }
