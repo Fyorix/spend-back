@@ -10,6 +10,5 @@ export enum GeocodingProviderType {
 
 export interface GeocodingProvider {
   geocode(address: string): Promise<Coordinate | null>;
-  autocomplete(query: string): Promise<string[]>;
   getName(): GeocodingProviderType;
 }

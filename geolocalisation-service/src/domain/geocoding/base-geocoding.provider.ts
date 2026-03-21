@@ -21,6 +21,5 @@ export abstract class BaseGeocodingProvider implements GeocodingProvider {
   }
 
   abstract geocode(address: string): Promise<Coordinate | null>;
-  abstract autocomplete(query: string): Promise<string[]>;
   abstract getName(): GeocodingProviderType;
 }

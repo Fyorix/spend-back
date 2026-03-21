@@ -10,10 +10,6 @@ interface OsmResponse {
   lon: string;
 }
 
-interface OsmAutocompleteResponse {
-  display_name: string;
-}
-
 export class OpenStreetMapProvider extends BaseGeocodingProvider {
   private static queue: Promise<void> = Promise.resolve();
   private readonly logger = new Logger(OpenStreetMapProvider.name);
@@ -49,23 +45,6 @@ export class OpenStreetMapProvider extends BaseGeocodingProvider {
       };
     }
     return null;
-  }
-
-  async autocomplete(query: string): Promise<string[]> {
-    await this.wait();
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`;
-    const data = await this.request<OsmAutocompleteResponse[]>(url, {
-      headers: { 'User-Agent': 'SpendApp/1.0' },
-    });
-
-    if (data) {
-      return data.map((item) => item.display_name);
-    }
-
-    this.logger.error(
-      'Autocomplete request failed or returned invalid data for OpenStreetMap',
-    );
-    return [];
   }
 
   getName(): GeocodingProviderType {

@@ -87,34 +87,4 @@ describe('GeocodingService (Unit)', () => {
     expect(googleSpy).toHaveBeenCalled();
     expect(osmSpy).toHaveBeenCalled();
   });
-
-  it('should return suggestions from Google Maps if successful', async () => {
-    const query = 'Paris';
-    const suggestions = ['Paris, France', 'Paris, TX'];
-    const googleSpy = jest
-      .spyOn(googleProvider, 'autocomplete')
-      .mockResolvedValue(suggestions);
-
-    const result = await service.autocomplete(query);
-
-    expect(result).toEqual(suggestions);
-    expect(googleSpy).toHaveBeenCalledWith(query);
-  });
-
-  it('should fallback to OSM autocomplete if Google Maps fails', async () => {
-    const query = 'Paris';
-    const suggestions = ['Paris, France'];
-    const googleSpy = jest
-      .spyOn(googleProvider, 'autocomplete')
-      .mockResolvedValue([]);
-    const osmSpy = jest
-      .spyOn(osmProvider, 'autocomplete')
-      .mockResolvedValue(suggestions);
-
-    const result = await service.autocomplete(query);
-
-    expect(result).toEqual(suggestions);
-    expect(googleSpy).toHaveBeenCalledWith(query);
-    expect(osmSpy).toHaveBeenCalledWith(query);
-  });
 });

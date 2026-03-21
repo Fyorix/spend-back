@@ -1,6 +1,6 @@
 import { GeolocationApplicationService } from '../../../application/services/geolocation.application.service.js';
 import { GeocodingService } from '../../../infrastructure/geocoding/geocoding.service.js';
-import { RedisGeolocationRepository } from '../../../infrastructure/redis/redis.repository.js';
+import { GeolocalisationRepository } from '../../../infrastructure/database/geolocalisation.repository.js';
 import { GeocodingProviderType } from '../../../domain/geocoding/geocoding.provider.js';
 import { jest } from '@jest/globals';
 import { createCoordinate } from '../../helpers/factories.js';
@@ -8,22 +8,21 @@ import { createCoordinate } from '../../helpers/factories.js';
 describe('GeolocationApplicationService (Unit)', () => {
   let service: GeolocationApplicationService;
   let mockGeocodingService: GeocodingService;
-  let mockRedisRepository: RedisGeolocationRepository;
+  let mockRepository: GeolocalisationRepository;
 
   beforeEach(() => {
     mockGeocodingService = {
       geocode: jest.fn(),
-      autocomplete: jest.fn(),
     } as unknown as GeocodingService;
 
-    mockRedisRepository = {
+    mockRepository = {
       addTransaction: jest.fn(),
       findNearbyTransactions: jest.fn(),
-    } as unknown as RedisGeolocationRepository;
+    } as unknown as GeolocalisationRepository;
 
     service = new GeolocationApplicationService(
       mockGeocodingService,
-      mockRedisRepository,
+      mockRepository,
     );
   });
 
@@ -42,7 +41,7 @@ describe('GeolocationApplicationService (Unit)', () => {
       .spyOn(mockGeocodingService, 'geocode')
       .mockResolvedValue(coordinate);
     const addTransactionSpy = jest
-      .spyOn(mockRedisRepository, 'addTransaction')
+      .spyOn(mockRepository, 'addTransaction')
       .mockResolvedValue();
 
     const result = await service.trackTransaction(
@@ -70,7 +69,7 @@ describe('GeolocationApplicationService (Unit)', () => {
       .spyOn(mockGeocodingService, 'geocode')
       .mockResolvedValue(null);
 
-    const addTransactionSpy = jest.spyOn(mockRedisRepository, 'addTransaction');
+    const addTransactionSpy = jest.spyOn(mockRepository, 'addTransaction');
 
     const result = await service.trackTransaction(
       transactionId,
@@ -83,17 +82,26 @@ describe('GeolocationApplicationService (Unit)', () => {
     expect(addTransactionSpy).not.toHaveBeenCalled();
   });
 
-  it('should return address suggestions via autocomplete', async () => {
-    const query = 'Paris';
-    const suggestions = ['Paris, France'];
+  it('should return nearby transactions', async () => {
+    const lat = 1;
+    const lng = 2;
+    const radius = 10;
+    const transactions = [
+      {
+        transactionId: '1',
+        latitude: 1.1,
+        longitude: 2.1,
+        amount: 100,
+      },
+    ];
 
-    const autocompleteSpy = jest
-      .spyOn(mockGeocodingService, 'autocomplete')
-      .mockResolvedValue(suggestions);
+    const findNearbySpy = jest
+      .spyOn(mockRepository, 'findNearbyTransactions')
+      .mockResolvedValue(transactions);
 
-    const result = await service.autocomplete(query);
+    const result = await service.getNearbyTransactions(lat, lng, radius);
 
-    expect(result).toEqual(suggestions);
-    expect(autocompleteSpy).toHaveBeenCalledWith(query, undefined);
+    expect(result).toEqual(transactions);
+    expect(findNearbySpy).toHaveBeenCalledWith(lat, lng, radius);
   });
 });
