@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { EventTag } from '@clement.pasteau/shared';
 import { GeolocalisationModel } from './models/geolocalisation.model.js';
 import { Coordinate } from '../../domain/geocoding/geocoding.provider.js';
 import { NearbyTransaction } from '../../domain/geocoding/geolocalisation.interface.js';
@@ -13,12 +14,13 @@ export class GeolocalisationRepository {
   constructor(
     @InjectRepository(GeolocalisationModel)
     private readonly repository: Repository<GeolocalisationModel>,
-  ) { }
+  ) {}
 
   async addTransaction(
     transactionId: string,
     coordinate: Coordinate,
     amount: number,
+    tag: EventTag,
   ): Promise<void> {
     const point: Point = {
       type: 'Point',
@@ -29,20 +31,24 @@ export class GeolocalisationRepository {
       transactionId,
       location: point,
       amount,
+      tag,
     };
 
     await this.repository.upsert(data, ['transactionId']);
-    this.logger.log(`Saved transaction ${transactionId} via TypeORM`);
+    this.logger.log(
+      `Saved transaction ${transactionId} with tag ${tag} via TypeORM`,
+    );
   }
 
   async findNearbyTransactions(
     latitude: number,
     longitude: number,
     radiusKm: number,
+    tag?: EventTag,
   ): Promise<NearbyTransaction[]> {
-    const results: GeolocalisationModel[] = await this.repository
+    const query = this.repository
       .createQueryBuilder('geo')
-      .select(['geo.transactionId', 'geo.amount', 'geo.location'])
+      .select(['geo.transactionId', 'geo.amount', 'geo.location', 'geo.tag'])
       .where(
         'ST_DWithin(geo.location, ST_SetSRID(ST_MakePoint(:lng, :lat), 4326), :radius)',
         {
@@ -50,17 +56,23 @@ export class GeolocalisationRepository {
           lat: latitude,
           radius: radiusKm * 1000,
         },
-      )
-      .getMany();
+      );
+
+    if (tag) {
+      query.andWhere('geo.tag = :tag', { tag });
+    }
+
+    const results: GeolocalisationModel[] = await query.getMany();
 
     return results.map((res: GeolocalisationModel): NearbyTransaction => {
-      const { transactionId, amount, location } = res;
+      const { transactionId, amount, location, tag: resTag } = res;
       const point = location;
       return {
         transactionId,
         longitude: point.coordinates[0],
         latitude: point.coordinates[1],
         amount: Number(amount),
+        tag: resTag,
       };
     });
   }

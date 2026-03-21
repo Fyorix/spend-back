@@ -481,18 +481,6 @@ __metadata:
   languageName: node
   linkType: soft
 
-"@clement.pasteau/contracts@npm:0.7.1":
-  version: 0.7.1
-  resolution: "@clement.pasteau/contracts@npm:0.7.1"
-  dependencies:
-    protobufjs: "npm:7.5.3"
-  peerDependencies:
-    "@nestjs/microservices": ^11.0.0
-    rxjs: ^7.0.0
-  checksum: 10c0/e79786315ae4a21dd1540bd6ec10bcfe3372959bec132b755026775db6db55622d1f8b2adfe28384ceba4f2a1eb0a9e0246718f18209e23efcace6c92ad20d7f
-  languageName: node
-  linkType: hard
-
 "@clement.pasteau/contracts@npm:0.7.2":
   version: 0.7.2
   resolution: "@clement.pasteau/contracts@npm:0.7.2"
@@ -505,6 +493,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@clement.pasteau/contracts@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@clement.pasteau/contracts@npm:1.0.0"
+  dependencies:
+    protobufjs: "npm:7.5.3"
+  peerDependencies:
+    "@nestjs/microservices": ^11.0.0
+    rxjs: ^7.0.0
+  checksum: 10c0/49a4f93b000a771dada3c613b80b96343a388980d8219b45adf974dbd829c6218d30bc5e39a770f3a5f3967786a9d596eae9de46bb9f34c2f4d2b137067656bd
+  languageName: node
+  linkType: hard
+
 "@clement.pasteau/contracts@npm:^0.5.0":
   version: 0.5.0
   resolution: "@clement.pasteau/contracts@npm:0.5.0"
@@ -514,6 +514,13 @@ __metadata:
     "@nestjs/microservices": ^11.0.0
     rxjs: ^7.0.0
   checksum: 10c0/e583d5000295d3b0bed3e83ab5d816772543934adfc64d9dbb5c1a0c3b9617557de37bf309399eba4ab62f69a17bd2ae6cdbe17db73c3af0f49c303d5437472b
+  languageName: node
+  linkType: hard
+
+"@clement.pasteau/shared@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@clement.pasteau/shared@npm:1.0.0"
+  checksum: 10c0/f7d634a453b346d72d7894bce780caa3d42f6c7e66b17345b7c88a3fb2e8643c0e939287ae19615aad8c49f36935a7ddfcfa4ff2316c90703f1b0d4a9888b397
   languageName: node
   linkType: hard
 
@@ -2548,6 +2555,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/geojson@npm:^7946.0.16":
+  version: 7946.0.16
+  resolution: "@types/geojson@npm:7946.0.16"
+  checksum: 10c0/1ff24a288bd5860b766b073ead337d31d73bdc715e5b50a2cee5cb0af57a1ed02cc04ef295f5fa68dc40fe3e4f104dd31282b2b818a5ba3231bc1001ba084e3c
+  languageName: node
+  linkType: hard
+
 "@types/http-cache-semantics@npm:^4.0.2":
   version: 4.2.0
   resolution: "@types/http-cache-semantics@npm:4.2.0"
@@ -3619,7 +3633,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "api-gateway@workspace:api-gateway"
   dependencies:
-    "@clement.pasteau/contracts": "npm:0.7.1"
+    "@clement.pasteau/contracts": "npm:1.0.0"
+    "@clement.pasteau/shared": "npm:1.0.0"
     "@eslint/eslintrc": "npm:^3.2.0"
     "@eslint/js": "npm:^9.18.0"
     "@grpc/grpc-js": "npm:^1.14.3"
@@ -5823,11 +5838,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"geojson@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "geojson@npm:0.5.0"
+  checksum: 10c0/d7fd376c201933dea1307b7c08032f249f73b9399d6287211f6a523d0efa9260caf2a38319f55075682d53dc4cb4c52b9f9c845f2fd03bef9832903f16177ab0
+  languageName: node
+  linkType: hard
+
 "geolocalisation-service@workspace:geolocalisation-service":
   version: 0.0.0-use.local
   resolution: "geolocalisation-service@workspace:geolocalisation-service"
   dependencies:
-    "@clement.pasteau/contracts": "npm:0.7.2"
+    "@clement.pasteau/contracts": "npm:1.0.0"
+    "@clement.pasteau/shared": "npm:1.0.0"
     "@eslint/eslintrc": "npm:^3.2.0"
     "@eslint/js": "npm:^9.18.0"
     "@grpc/grpc-js": "npm:^1.14.3"
@@ -5840,18 +5863,22 @@ __metadata:
     "@nestjs/schematics": "npm:^11.0.0"
     "@nestjs/swagger": "npm:^11.2.6"
     "@nestjs/testing": "npm:^11.1.15"
+    "@nestjs/typeorm": "npm:^11.0.0"
     "@swc/cli": "npm:^0.6.0"
     "@swc/core": "npm:^1.10.7"
     "@types/express": "npm:^5.0.0"
+    "@types/geojson": "npm:^7946.0.16"
     "@types/jest": "npm:^30.0.0"
     "@types/node": "npm:^22.10.7"
+    "@types/pg": "npm:^8.18.0"
     "@types/supertest": "npm:^6.0.2"
     eslint: "npm:^9.18.0"
     eslint-config-prettier: "npm:^10.0.1"
     eslint-plugin-prettier: "npm:^5.2.2"
+    geojson: "npm:^0.5.0"
     globals: "npm:^16.0.0"
-    ioredis: "npm:^5.10.0"
     jest: "npm:^30.2.0"
+    pg: "npm:^8.20.0"
     prettier: "npm:^3.4.2"
     reflect-metadata: "npm:^0.2.2"
     rxjs: "npm:^7.8.1"
@@ -5862,6 +5889,7 @@ __metadata:
     ts-loader: "npm:^9.5.2"
     ts-node: "npm:^10.9.2"
     tsconfig-paths: "npm:^4.2.0"
+    typeorm: "npm:^0.3.28"
     typescript: "npm:^5.7.3"
     typescript-eslint: "npm:^8.20.0"
   languageName: unknown

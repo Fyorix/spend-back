@@ -1,3 +1,4 @@
+import { EventTag } from '@clement.pasteau/shared';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -26,6 +27,10 @@ export class GeolocalisationModel {
 
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   amount!: number;
+
+  @Index()
+  @Column({ type: 'enum', enum: EventTag })
+  tag!: EventTag;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;

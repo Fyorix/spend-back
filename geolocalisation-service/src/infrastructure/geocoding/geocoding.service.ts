@@ -10,37 +10,35 @@ import { loadEnvConfig } from '../../config/env.config.js';
 
 @Injectable()
 export class GeocodingService {
-  private readonly providers: GeocodingProvider[];
+  private readonly providers: Record<GeocodingProviderType, GeocodingProvider>;
   private readonly logger = new Logger(GeocodingService.name);
 
   constructor() {
     const config = loadEnvConfig();
-    this.providers = [
-      new GoogleMapsProvider(config.googleMapsApiKey),
-      new OpenStreetMapProvider(),
-    ];
+    this.providers = {
+      [GeocodingProviderType.GOOGLE_MAPS]: new GoogleMapsProvider(
+        config.googleMapsApiKey,
+      ),
+      [GeocodingProviderType.OPEN_STREET_MAP]: new OpenStreetMapProvider(),
+    };
   }
 
   async geocode(
     address: string,
-    providerName?: GeocodingProviderType,
+    providerName: GeocodingProviderType,
   ): Promise<Coordinate | null> {
-    const effectiveProviders = providerName
-      ? this.providers.filter((p) => p.getName() === providerName)
-      : this.providers;
+    const provider = this.providers[providerName];
+    if (!provider) return null;
 
-    for (const provider of effectiveProviders) {
-      try {
-        const result = await provider.geocode(address);
-        if (result) {
-          this.logger.log(`Successfully geocoded using ${provider.getName()}`);
-          return result;
-        }
-      } catch {
-        this.logger.error(`Geocoding failed for ${provider.getName()}`);
+    try {
+      const result = await provider.geocode(address);
+      if (result) {
+        this.logger.log(`Successfully geocoded using ${provider.getName()}`);
+        return result;
       }
+    } catch (error) {
+      this.logger.error(`Geocoding failed for ${providerName}`, error);
     }
-    this.logger.error('No geocoding provider could resolve the address.');
     return null;
   }
 }
