@@ -88,3 +88,21 @@ export const createMockFetchResponse = (
     status: 200,
     statusText: 'OK',
   }) as unknown as Response;
+
+import { GeolocalisationModel } from '../../infrastructure/database/models/geolocalisation.model.js';
+
+export const createGeolocalisationEntity = (
+  overrides?: Partial<GeolocalisationModel>,
+): GeolocalisationModel => {
+  const entity = new GeolocalisationModel();
+  entity.id = 'uuid-1';
+  entity.transactionId = 'tx-1';
+  entity.location = {
+    type: 'Point',
+    coordinates: [2.3522, 48.8566],
+  };
+  entity.amount = 100;
+  entity.createdAt = new Date();
+  entity.updatedAt = new Date();
+  return Object.assign(entity, overrides);
+};

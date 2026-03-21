@@ -1,10 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { GeocodingService } from '../../infrastructure/geocoding/geocoding.service.js';
-import { RedisGeolocationRepository } from '../../infrastructure/redis/redis.repository.js';
+import { GeolocalisationRepository } from '../../infrastructure/database/geolocalisation.repository.js';
 import {
   Coordinate,
   GeocodingProviderType,
 } from '../../domain/geocoding/geocoding.provider.js';
+import { NearbyTransaction } from '../../domain/geocoding/geolocalisation.interface.js';
 
 @Injectable()
 export class GeolocationApplicationService {
@@ -12,7 +13,7 @@ export class GeolocationApplicationService {
 
   constructor(
     private readonly geocodingService: GeocodingService,
-    private readonly redisRepository: RedisGeolocationRepository,
+    private readonly geolocalisationRepository: GeolocalisationRepository,
   ) {}
 
   async trackTransaction(
@@ -27,7 +28,7 @@ export class GeolocationApplicationService {
       return null;
     }
 
-    await this.redisRepository.addTransaction(
+    await this.geolocalisationRepository.addTransaction(
       transactionId,
       coordinate,
       amount,
@@ -42,18 +43,11 @@ export class GeolocationApplicationService {
     latitude: number,
     longitude: number,
     radiusKm: number,
-  ) {
-    return this.redisRepository.findNearbyTransactions(
+  ): Promise<NearbyTransaction[]> {
+    return this.geolocalisationRepository.findNearbyTransactions(
       latitude,
       longitude,
       radiusKm,
     );
-  }
-
-  async autocomplete(
-    query: string,
-    provider?: GeocodingProviderType,
-  ): Promise<string[]> {
-    return this.geocodingService.autocomplete(query, provider);
   }
 }

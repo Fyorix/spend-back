@@ -43,25 +43,4 @@ export class GeocodingService {
     this.logger.error('No geocoding provider could resolve the address.');
     return null;
   }
-
-  async autocomplete(
-    query: string,
-    providerName?: GeocodingProviderType,
-  ): Promise<string[]> {
-    const effectiveProviders = providerName
-      ? this.providers.filter((p) => p.getName() === providerName)
-      : this.providers;
-
-    for (const provider of effectiveProviders) {
-      try {
-        const results = await provider.autocomplete(query);
-        if (results.length > 0) {
-          return results;
-        }
-      } catch {
-        this.logger.error(`Autocomplete failed for ${provider.getName()}`);
-      }
-    }
-    return [];
-  }
 }

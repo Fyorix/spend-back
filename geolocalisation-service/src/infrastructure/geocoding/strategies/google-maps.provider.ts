@@ -15,10 +15,6 @@ interface GoogleMapsGeocodeResponse {
   }[];
 }
 
-interface GoogleMapsAutocompleteResponse {
-  predictions: { description: string }[];
-}
-
 export class GoogleMapsProvider extends BaseGeocodingProvider {
   private readonly apiKey: string;
 
@@ -38,12 +34,6 @@ export class GoogleMapsProvider extends BaseGeocodingProvider {
       };
     }
     return null;
-  }
-
-  async autocomplete(query: string): Promise<string[]> {
-    const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(query)}&key=${this.apiKey}`;
-    const data = await this.request<GoogleMapsAutocompleteResponse>(url);
-    return data?.predictions.map((p) => p.description) || [];
   }
 
   getName(): GeocodingProviderType {

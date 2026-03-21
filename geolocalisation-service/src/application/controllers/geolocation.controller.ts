@@ -19,7 +19,7 @@ import { GeocodingProviderType } from '../../domain/geocoding/geocoding.provider
 export class GeolocationController implements GeolocationServiceController {
   constructor(
     private readonly geolocationService: GeolocationApplicationService,
-  ) {}
+  ) { }
 
   @GrpcMethod(GEOLOCATION_SERVICE_NAME, 'TrackTransaction')
   async trackTransaction(
@@ -70,13 +70,9 @@ export class GeolocationController implements GeolocationServiceController {
   }
 
   @GrpcMethod(GEOLOCATION_SERVICE_NAME, 'Autocomplete')
-  async autocomplete(
-    request: AutocompleteRequest,
-  ): Promise<AutocompleteResponse> {
-    const suggestions = await this.geolocationService.autocomplete(
-      request.query,
-      request.provider as GeocodingProviderType,
-    );
-    return { suggestions };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  autocomplete(_request: AutocompleteRequest): AutocompleteResponse {
+    // Autocomplete is now handled client-side to reduce latency.
+    return { suggestions: [] };
   }
 }

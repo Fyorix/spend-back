@@ -3,7 +3,6 @@ import { jest } from '@jest/globals';
 import {
   createMockFetchResponse,
   createOsmGeocodeResponse,
-  createOsmAutocompleteResponse,
 } from '../../../helpers/factories.js';
 
 describe('OpenStreetMapProvider (Unit)', () => {
@@ -55,19 +54,6 @@ describe('OpenStreetMapProvider (Unit)', () => {
     const result = await provider.geocode(address);
 
     expect(result).toBeNull();
-    expect(fetchSpy).toHaveBeenCalled();
-  });
-
-  it('should return suggestions for a valid query', async () => {
-    const query = 'Paris';
-    const mockResponse = createOsmAutocompleteResponse(['Paris, France']);
-    const fetchSpy = jest
-      .spyOn(global, 'fetch')
-      .mockResolvedValue(createMockFetchResponse(mockResponse));
-
-    const result = await provider.autocomplete(query);
-
-    expect(result).toEqual(['Paris, France']);
     expect(fetchSpy).toHaveBeenCalled();
   });
 
