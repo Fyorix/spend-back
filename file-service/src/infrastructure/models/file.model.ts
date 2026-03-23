@@ -13,6 +13,9 @@ export class FileModel {
   originalName: string = '';
 
   @Column()
+  minioKey: string = '';
+
+  @Column()
   mimeType: string = '';
 
   @Column()
