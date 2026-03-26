@@ -20,4 +20,7 @@ export class FileModel {
 
   @Column()
   size: number = 0;
+
+  @Column()
+  status: string = '';
 }
