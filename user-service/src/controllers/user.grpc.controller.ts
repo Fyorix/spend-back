@@ -25,12 +25,21 @@ export class UserGrpcController implements UserServiceController {
   ) {}
 
   @GrpcMethod(USER_SERVICE_NAME, 'register')
-  async register(request: RegisterRequest): Promise<EmptyResponse> {
+  async register(request: RegisterRequest): Promise<TokenResponse> {
     const user = new UserEntity();
     user.email = request.email;
     user.password = request.password;
     await this.userService.register(user);
-    return {};
+
+    const result = await this.authService.login({
+      email: request.email,
+      password: request.password,
+    });
+
+    return {
+      accessToken: result.accessToken,
+      expiresIn: result.expiresIn,
+    };
   }
 
   @GrpcMethod(USER_SERVICE_NAME, 'login')
@@ -45,8 +54,15 @@ export class UserGrpcController implements UserServiceController {
     };
   }
 
-  @GrpcMethod(USER_SERVICE_NAME, 'getUser')
-  async getUser(request: GetUserRequest): Promise<UserResponse> {
+  @GrpcMethod(USER_SERVICE_NAME, 'verifyToken')
+  async verifyToken(request: {
+    token: string;
+  }): Promise<{ isValid: boolean; userId: string }> {
+    return this.authService.verifyToken(request.token);
+  }
+
+  @GrpcMethod(USER_SERVICE_NAME, 'getMe')
+  async getMe(request: GetUserRequest): Promise<UserResponse> {
     const user = await this.userService.getUserById(request.id);
     return {
       user: {

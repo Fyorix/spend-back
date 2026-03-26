@@ -17,7 +17,10 @@
     "lint:all": "yarn workspaces foreach -A run lint"
   },
   "dependencies": {
-    "@clement.pasteau/contracts": "0.7.2"
+    "@clement.pasteau/account-service": "0.4.4",
+    "@clement.pasteau/contracts": "1.1.0",
+    "@clement.pasteau/shared": "1.1.0",
+    "@clement.pasteau/user-service": "0.4.2"
   },
   "installConfig": {
     "hoistingLimits": "workspaces"

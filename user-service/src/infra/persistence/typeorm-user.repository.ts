@@ -12,7 +12,7 @@ export class TypeormUserRepository implements IUserRepository {
   constructor(
     @InjectRepository(UserModel)
     private readonly baseRepo: Repository<UserModel>,
-  ) {}
+  ) { }
 
   async findByEmail(email: string): Promise<UserEntity | null> {
     const user = await this.baseRepo.findOne({ where: { email } });
@@ -30,8 +30,9 @@ export class TypeormUserRepository implements IUserRepository {
     return UserMapper.toDomain(user);
   }
 
-  async save(user: UserEntity): Promise<void> {
-    await this.baseRepo.save(user);
+  async save(user: UserEntity): Promise<UserEntity> {
+    const saved = await this.baseRepo.save(user);
+    return UserMapper.toDomain(saved);
   }
 
   async deleteById(id: string): Promise<void> {

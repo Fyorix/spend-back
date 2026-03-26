@@ -6,6 +6,8 @@ export interface EnvConfig {
   dbPass: string;
   dbName: string;
   googleMapsApiKey: string;
+  redisHost: string;
+  redisPort: number;
 }
 
 export function loadEnvConfig(): EnvConfig {
@@ -17,5 +19,7 @@ export function loadEnvConfig(): EnvConfig {
     dbPass: process.env.DB_PASS || 'password',
     dbName: process.env.DB_NAME || 'spend',
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY || '',
+    redisHost: process.env.REDIS_HOST || 'localhost',
+    redisPort: parseInt(process.env.REDIS_PORT || '6379', 10),
   };
 }

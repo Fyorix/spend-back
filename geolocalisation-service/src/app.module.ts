@@ -4,7 +4,9 @@ import { GeolocationController } from './application/controllers/geolocation.con
 import { GeolocationApplicationService } from './application/services/geolocation.application.service.js';
 import { GeocodingService } from './infrastructure/geocoding/geocoding.service.js';
 import { GeolocalisationRepository } from './infrastructure/database/geolocalisation.repository.js';
+import { RedisSubService } from './infrastructure/redis/redis-sub.service.js';
 import { GeolocalisationModel } from './infrastructure/database/models/geolocalisation.model.js';
+import { RedisModule } from './infrastructure/redis/redis.module.js';
 import { loadEnvConfig } from './config/env.config.js';
 
 const config = loadEnvConfig();
@@ -22,12 +24,14 @@ const config = loadEnvConfig();
       synchronize: true,
     }),
     TypeOrmModule.forFeature([GeolocalisationModel]),
+    RedisModule,
   ],
   controllers: [GeolocationController],
   providers: [
     GeolocationApplicationService,
     GeocodingService,
     GeolocalisationRepository,
+    RedisSubService,
   ],
 })
-export class AppModule {}
+export class AppModule { }
