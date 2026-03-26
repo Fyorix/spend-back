@@ -30,7 +30,6 @@ export class FileService {
     file.minioKey = `${userId}-${Date.now()}/${originalName}`;
 
     const savedFile = await this.fileRepository.save(file);
-    await new Promise((resolve) => setTimeout(resolve, 10000));
     try {
       const buffer = await new Promise<Buffer>((resolve, reject) => {
         const chunksArray: Uint8Array[] = [];
@@ -43,7 +42,6 @@ export class FileService {
       await this.s3Service.putObject(savedFile.minioKey, buffer, mimeType);
       savedFile.status = FileStatus.COMPLETED;
       await this.fileRepository.save(savedFile);
-      await new Promise((resolve) => setTimeout(resolve, 10000));
       return savedFile;
     } catch (error) {
       savedFile.status = FileStatus.FAILED;
