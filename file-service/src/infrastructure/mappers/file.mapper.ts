@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { NotImplementedException } from '@nestjs/common';
 import { FileEntity } from '../../domain/entities/file.entity.js';
 import { FileModel } from '../models/file.model.js';
 

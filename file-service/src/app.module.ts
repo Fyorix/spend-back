@@ -11,6 +11,7 @@ import {
   DATABASE_DEV_CONF,
   DATABASE_PROD_CONFIG,
 } from './config/database.config.js';
+import { S3Service } from './infrastructure/s3/s3.service.js';
 
 const isRuntimeEnvConfig =
   process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test';
@@ -30,6 +31,7 @@ const isRuntimeEnvConfig =
       provide: FILE_REPOSITORY,
       useClass: FileRepositoryImpl,
     },
+    S3Service,
   ],
 })
 export class AppModule {}
