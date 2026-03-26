@@ -11,19 +11,13 @@ async function bootstrap() {
   const config = loadEnvConfig();
   const app = await NestFactory.create(AppModule);
 
-  const contractsPath = join(
-    require.resolve('@clement.pasteau/contracts/package.json'),
-    '..',
-  );
+  const contractsPath = join(require.resolve('@clement.pasteau/contracts/package.json'), '..');
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
       package: GEOLOCATION_PACKAGE_NAME,
-      protoPath: join(
-        contractsPath,
-        'proto/geolocation/geolocation.services.proto',
-      ),
+      protoPath: join(contractsPath, 'proto/geolocation/geolocation.services.proto'),
       url: '0.0.0.0:50053',
       loader: {
         keepCase: true,

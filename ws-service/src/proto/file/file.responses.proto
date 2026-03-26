@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package file;
+
+import "file/file.proto";
+
+message FileResponse {
+  File file = 1;
+}
+
+message FileListResponse {
+  repeated File files = 1;
+}
+
+message EmptyResponse {}

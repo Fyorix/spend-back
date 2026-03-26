@@ -18,4 +18,4 @@ import { RedisPubService } from './redis-pub.service.js';
   ],
   exports: [REDIS_PUBLISHER, RedisPubService],
 })
-export class RedisModule { }
+export class RedisModule {}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package file;
+
+import "file/file.command.proto";
+import "file/file.query.proto";
+import "file/file.responses.proto";
+
+service FileService {
+  rpc UploadFile(stream UploadFileRequest) returns (FileResponse);
+  rpc GetFile(GetFileRequest) returns (FileResponse);
+  rpc GetUserFiles(GetUserFilesRequest) returns (FileListResponse);
+  rpc DeleteFile(DeleteFileRequest) returns (EmptyResponse);
+}

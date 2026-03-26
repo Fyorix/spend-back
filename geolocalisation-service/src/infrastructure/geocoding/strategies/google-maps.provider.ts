@@ -1,7 +1,4 @@
-import {
-  Coordinate,
-  GeocodingProviderType,
-} from '../../../domain/geocoding/geocoding.provider.js';
+import { Coordinate, GeocodingProviderType } from '../../../domain/geocoding/geocoding.provider.js';
 import { BaseGeocodingProvider } from '../../../domain/geocoding/base-geocoding.provider.js';
 
 interface GoogleMapsGeocodeResponse {

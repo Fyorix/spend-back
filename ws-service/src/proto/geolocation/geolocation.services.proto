@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package geolocation;
+
+import "geolocation/geolocation.command.proto";
+import "geolocation/geolocation.query.proto";
+import "geolocation/geolocation.responses.proto";
+
+service GeolocationService {
+  rpc TrackTransaction (TrackTransactionRequest) returns (TrackTransactionResponse);
+  rpc GetNearbyTransactions (GetNearbyTransactionsRequest) returns (GetNearbyTransactionsResponse);
+}

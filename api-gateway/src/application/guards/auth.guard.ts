@@ -3,32 +3,21 @@ import {
   ExecutionContext,
   Injectable,
   UnauthorizedException,
-  OnModuleInit,
-  Inject,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import * as nestCore from '@nestjs/core';
-import type { ClientGrpc } from '@nestjs/microservices';
 import type { Request } from 'express';
-import { firstValueFrom } from 'rxjs';
-import {
-  USER_SERVICE_NAME,
-  type UserServiceClient,
-} from '@clement.pasteau/contracts';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator.js';
+export interface CustomRequest extends Request {
+  user: { id: string };
+}
 
 @Injectable()
-export class AuthGuard implements CanActivate, OnModuleInit {
-  private userService!: UserServiceClient;
-
+export class AuthGuard implements CanActivate {
   constructor(
-    @Inject('USER_PACKAGE') private readonly client: ClientGrpc,
+    private readonly jwtService: JwtService,
     private readonly reflector: nestCore.Reflector,
   ) { }
-
-  onModuleInit() {
-    this.userService =
-      this.client.getService<UserServiceClient>(USER_SERVICE_NAME);
-  }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
@@ -48,15 +37,8 @@ export class AuthGuard implements CanActivate, OnModuleInit {
     }
 
     try {
-      const response = await firstValueFrom(
-        this.userService.verifyToken({ token }),
-      );
-
-      if (!response.isValid || !response.userId) {
-        throw new UnauthorizedException('Token is invalid');
-      }
-
-      (request as any)['user'] = { id: response.userId };
+      const payload: { sub: string } = await this.jwtService.verifyAsync(token);
+      (request as CustomRequest)['user'] = { id: payload.sub };
       return true;
     } catch {
       throw new UnauthorizedException('Authentication failed');

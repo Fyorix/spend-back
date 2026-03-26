@@ -22,6 +22,7 @@ import {
   type TrackTransactionResponse,
   type GetNearbyTransactionsRequest,
   type GetNearbyTransactionsResponse,
+  type GetMapZonesResponse,
 } from "@clement.pasteau/contracts";
 import { firstValueFrom } from "rxjs";
 import { EventTag } from "@clement.pasteau/shared";
@@ -59,7 +60,7 @@ export class GeolocationGatewayController implements OnModuleInit {
 
   constructor(
     @Inject("GEOLOCATION_PACKAGE") private readonly client: ClientGrpc,
-  ) {}
+  ) { }
 
   onModuleInit() {
     this.geolocationService = this.client.getService<GeolocationServiceClient>(
@@ -116,6 +117,22 @@ export class GeolocationGatewayController implements OnModuleInit {
         latitude: Number(query.latitude),
         longitude: Number(query.longitude),
         radiusKm: Number(query.radiusKm),
+        tag: query.tag || "",
+      }),
+    );
+  }
+
+  @Get("zones")
+  @ApiOperation({ summary: "Get map zones weighted by transactions" })
+  @ApiResponse({ status: 200, description: "Map zones found" })
+  async getMapZones(
+    @Query() query: any,
+  ): Promise<GetMapZonesResponse> {
+    return firstValueFrom(
+      this.geolocationService.getMapZones({
+        latitude: Number(query.latitude) || 0,
+        longitude: Number(query.longitude) || 0,
+        radiusKm: Number(query.radiusKm) || 100,
         tag: query.tag || "",
       }),
     );

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package account;
+
+enum EventTag {
+  FOOD = 0;
+  TRANSPORT = 1;
+  ENTERTAINMENT = 2;
+  SHOPPING = 3;
+  HEALTH = 4;
+  TRAVEL = 5;
+  UTILITIES = 6;
+  OTHER = 7;
+}
+
+message Transaction {
+  string id = 1;
+  string name = 2;
+  double price = 3;
+  EventTag tag = 4;
+  string user_id = 5;
+  string created_at = 6;
+}

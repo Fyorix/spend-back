@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package file;
+
+message UploadFileRequest {
+  oneof request {
+    UploadMetadata metadata = 1;
+    bytes chunk = 2;
+  }
+}
+
+message UploadMetadata {
+  string userId = 1;
+  string originalName = 2;
+  string mimeType = 3;
+  int64 size = 4;
+}
+
+message DeleteFileRequest {
+  string id = 1;
+}

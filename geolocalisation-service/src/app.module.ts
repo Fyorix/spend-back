@@ -6,6 +6,7 @@ import { GeocodingService } from './infrastructure/geocoding/geocoding.service.j
 import { GeolocalisationRepository } from './infrastructure/database/geolocalisation.repository.js';
 import { RedisSubService } from './infrastructure/redis/redis-sub.service.js';
 import { GeolocalisationModel } from './infrastructure/database/models/geolocalisation.model.js';
+import { MapZoneModel } from './infrastructure/database/models/map-zone.model.js';
 import { RedisModule } from './infrastructure/redis/redis.module.js';
 import { loadEnvConfig } from './config/env.config.js';
 
@@ -20,10 +21,10 @@ const config = loadEnvConfig();
       username: config.dbUser,
       password: config.dbPass,
       database: config.dbName,
-      entities: [GeolocalisationModel],
+      entities: [GeolocalisationModel, MapZoneModel],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([GeolocalisationModel]),
+    TypeOrmModule.forFeature([GeolocalisationModel, MapZoneModel]),
     RedisModule,
   ],
   controllers: [GeolocationController],
@@ -34,4 +35,4 @@ const config = loadEnvConfig();
     RedisSubService,
   ],
 })
-export class AppModule { }
+export class AppModule {}

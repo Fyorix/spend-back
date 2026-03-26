@@ -17,11 +17,9 @@ export class TransactionService {
     @Inject('TRANSACTION_REPOSITORY')
     private readonly transactionRepository: ITransactionRepository,
     private readonly redisPubService: RedisPubService,
-  ) { }
+  ) {}
 
-  async createTransaction(
-    request: CreateTransactionRequest,
-  ): Promise<TransactionEntity> {
+  async createTransaction(request: CreateTransactionRequest): Promise<TransactionEntity> {
     const transaction: TransactionEntity = new TransactionEntity();
     transaction.id = crypto.randomUUID();
     transaction.name = request.name;

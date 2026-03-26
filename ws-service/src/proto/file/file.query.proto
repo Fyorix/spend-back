@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package file;
+
+message GetFileRequest {
+  string id = 1;
+}
+
+message GetUserFilesRequest {
+  string userId = 1;
+}

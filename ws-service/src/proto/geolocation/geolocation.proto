@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package geolocation;
+
+message Coordinate {
+  double latitude = 1;
+  double longitude = 2;
+}
+
+message TransactionPoint {
+  string transactionId = 1;
+  double latitude = 2;
+  double longitude = 3;
+  double amount = 4;
+  string tag = 5;
+}

@@ -9,6 +9,9 @@ import { Request } from 'express';
 import { AuthService } from '../core/services/auth.service.js';
 import { IS_PUBLIC_KEY } from './public.decorator.js';
 
+export interface CustomRequest extends Request {
+  user: { sub: string };
+}
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -40,7 +43,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Invalid or expired token');
     }
 
-    (request as any).user = { sub: verificationResult.userId };
+    (request as CustomRequest).user = { sub: verificationResult.userId };
 
     return true;
   }

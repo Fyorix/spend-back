@@ -2,10 +2,7 @@ import { GeolocalisationRepository } from '../../../infrastructure/database/geol
 import { EventTag } from '@clement.pasteau/shared';
 import { GeolocalisationModel } from '../../../infrastructure/database/models/geolocalisation.model.js';
 import { jest } from '@jest/globals';
-import {
-  createCoordinate,
-  createGeolocalisationEntity,
-} from '../../helpers/factories.js';
+import { createCoordinate, createGeolocalisationEntity } from '../../helpers/factories.js';
 import { Repository, InsertResult, SelectQueryBuilder } from 'typeorm';
 
 describe('GeolocalisationRepository (Unit)', () => {
@@ -16,9 +13,7 @@ describe('GeolocalisationRepository (Unit)', () => {
     mockTypeOrmRepository = {
       upsert: jest.fn(),
       createQueryBuilder: jest.fn(),
-    } as Partial<
-      Repository<GeolocalisationModel>
-    > as Repository<GeolocalisationModel>;
+    } as Partial<Repository<GeolocalisationModel>> as Repository<GeolocalisationModel>;
 
     repository = new GeolocalisationRepository(mockTypeOrmRepository);
   });
@@ -34,13 +29,11 @@ describe('GeolocalisationRepository (Unit)', () => {
       const amount = 100;
       const tag = EventTag.FOOD;
 
-      const upsertSpy = jest
-        .spyOn(mockTypeOrmRepository, 'upsert')
-        .mockResolvedValue({
-          identifiers: [],
-          generatedMaps: [],
-          raw: [],
-        } as InsertResult);
+      const upsertSpy = jest.spyOn(mockTypeOrmRepository, 'upsert').mockResolvedValue({
+        identifiers: [],
+        generatedMaps: [],
+        raw: [],
+      } as InsertResult);
 
       await repository.addTransaction(transactionId, coordinate, amount, tag);
 
@@ -77,9 +70,7 @@ describe('GeolocalisationRepository (Unit)', () => {
         select: jest.fn().mockReturnThis(),
         where: jest.fn().mockReturnThis(),
         andWhere: jest.fn().mockReturnThis(),
-        getMany: jest
-          .fn<() => Promise<GeolocalisationModel[]>>()
-          .mockResolvedValue([mockEntity]),
+        getMany: jest.fn<() => Promise<GeolocalisationModel[]>>().mockResolvedValue([mockEntity]),
       };
 
       const createQueryBuilderSpy = jest
@@ -90,12 +81,7 @@ describe('GeolocalisationRepository (Unit)', () => {
           > as SelectQueryBuilder<GeolocalisationModel>,
         );
 
-      const result = await repository.findNearbyTransactions(
-        lat,
-        lng,
-        radius,
-        tag,
-      );
+      const result = await repository.findNearbyTransactions(lat, lng, radius, tag);
 
       expect(createQueryBuilderSpy).toHaveBeenCalledWith('geo');
       expect(result).toHaveLength(1);

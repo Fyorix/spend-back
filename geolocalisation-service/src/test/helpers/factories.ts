@@ -27,9 +27,7 @@ export interface OsmAutocompleteResponse {
   display_name: string;
 }
 
-export const createCoordinate = (
-  overrides?: Partial<Coordinate>,
-): Coordinate => ({
+export const createCoordinate = (overrides?: Partial<Coordinate>): Coordinate => ({
   latitude: 48.8566,
   longitude: 2.3522,
   ...overrides,
@@ -59,10 +57,7 @@ export const createGoogleMapsAutocompleteResponse = (
   predictions: predictions.map((description) => ({ description })),
 });
 
-export const createOsmGeocodeResponse = (
-  lat = '48.8566',
-  lon = '2.3522',
-): OsmGeocodeResponse[] => [
+export const createOsmGeocodeResponse = (lat = '48.8566', lon = '2.3522'): OsmGeocodeResponse[] => [
   {
     lat,
     lon,
@@ -71,8 +66,7 @@ export const createOsmGeocodeResponse = (
 
 export const createOsmAutocompleteResponse = (
   suggestions: string[] = ['Paris, France'],
-): OsmAutocompleteResponse[] =>
-  suggestions.map((display_name) => ({ display_name }));
+): OsmAutocompleteResponse[] => suggestions.map((display_name) => ({ display_name }));
 
 export const createMockFetchResponse = (
   data:

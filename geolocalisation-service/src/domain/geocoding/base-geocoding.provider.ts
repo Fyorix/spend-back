@@ -1,14 +1,7 @@
-import {
-  Coordinate,
-  GeocodingProvider,
-  GeocodingProviderType,
-} from './geocoding.provider.js';
+import { Coordinate, GeocodingProvider, GeocodingProviderType } from './geocoding.provider.js';
 
 export abstract class BaseGeocodingProvider implements GeocodingProvider {
-  protected async request<T>(
-    url: string,
-    options?: RequestInit,
-  ): Promise<T | null> {
+  protected async request<T>(url: string, options?: RequestInit): Promise<T | null> {
     try {
       const response = await fetch(url, options);
       if (!response.ok) {

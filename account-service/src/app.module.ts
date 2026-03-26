@@ -10,10 +10,7 @@ import { TransactionService } from './core/services/transaction.service.js';
 import { AccountGrpcController } from './controllers/account.grpc.controller.js';
 
 const require = createRequire(import.meta.url);
-const contractsPath = join(
-  require.resolve('@clement.pasteau/contracts/package.json'),
-  '..',
-);
+const contractsPath = join(require.resolve('@clement.pasteau/contracts/package.json'), '..');
 
 @Module({
   imports: [
@@ -25,10 +22,7 @@ const contractsPath = join(
         transport: Transport.GRPC,
         options: {
           package: GEOLOCATION_PACKAGE_NAME,
-          protoPath: join(
-            contractsPath,
-            'proto/geolocation/geolocation.services.proto',
-          ),
+          protoPath: join(contractsPath, 'proto/geolocation/geolocation.services.proto'),
           url: '0.0.0.0:50053',
           loader: {
             longs: String,
@@ -50,4 +44,4 @@ const contractsPath = join(
     },
   ],
 })
-export class AppModule { }
+export class AppModule {}

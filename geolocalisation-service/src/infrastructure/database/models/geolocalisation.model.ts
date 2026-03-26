@@ -29,7 +29,7 @@ export class GeolocalisationModel {
   amount!: number;
 
   @Index()
-  @Column({ type: 'enum', enum: EventTag })
+  @Column({ type: 'enum', enum: EventTag, default: EventTag.OTHER })
   tag!: EventTag;
 
   @CreateDateColumn({ name: 'created_at' })

@@ -1,7 +1,7 @@
 import { Module, Global } from '@nestjs/common';
 import { REDIS_PUBLISHER, REDIS_SUBSCRIBER } from './redis.constants.js';
 import { loadEnvConfig } from '../../config/env.config.js';
-import Redis from 'ioredis';
+import { Redis } from 'ioredis';
 
 @Global()
 @Module({
@@ -23,4 +23,4 @@ import Redis from 'ioredis';
   ],
   exports: [REDIS_PUBLISHER, REDIS_SUBSCRIBER],
 })
-export class RedisModule {}
+export class RedisModule { }
