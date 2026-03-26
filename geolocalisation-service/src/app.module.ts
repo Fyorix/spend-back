@@ -1,26 +1,33 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { EventTestController } from './application/event-test.controller.js';
-import { AppService } from './app.service';
-import { RedisModule } from './infrastructure/redis/redis.module';
-import { RedisPubService } from './infrastructure/redis/redis-pub.service';
-import { RedisSubService } from './infrastructure/redis/redis-sub.service';
-import { HandlerRegistry } from './application/handlers/handler.registry';
-import { NotificationHandler } from './application/handlers/notification.handler';
-import { GeolocationUpdatesHandler } from './application/handlers/geolocation-updates.handler';
-import { PongHandler } from './application/handlers/pong.handler';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { GeolocationController } from './application/controllers/geolocation.controller.js';
+import { GeolocationApplicationService } from './application/services/geolocation.application.service.js';
+import { GeocodingService } from './infrastructure/geocoding/geocoding.service.js';
+import { GeolocalisationRepository } from './infrastructure/database/geolocalisation.repository.js';
+import { GeolocalisationModel } from './infrastructure/database/models/geolocalisation.model.js';
+import { loadEnvConfig } from './config/env.config.js';
+
+const config = loadEnvConfig();
 
 @Module({
-  imports: [RedisModule],
-  controllers: [AppController, EventTestController],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: config.dbHost,
+      port: config.dbPort,
+      username: config.dbUser,
+      password: config.dbPass,
+      database: config.dbName,
+      entities: [GeolocalisationModel],
+      synchronize: true,
+    }),
+    TypeOrmModule.forFeature([GeolocalisationModel]),
+  ],
+  controllers: [GeolocationController],
   providers: [
-    AppService,
-    RedisPubService,
-    RedisSubService,
-    HandlerRegistry,
-    NotificationHandler,
-    GeolocationUpdatesHandler,
-    PongHandler,
+    GeolocationApplicationService,
+    GeocodingService,
+    GeolocalisationRepository,
   ],
 })
 export class AppModule {}
