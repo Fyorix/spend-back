@@ -1,7 +1,15 @@
 import { Module } from '@nestjs/common';
-import { ClientsModule, GrpcOptions, Transport } from '@nestjs/microservices';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { APP_GUARD } from '@nestjs/core';
 import { GeolocationGatewayController } from './application/controllers/geolocation.gateway.controller.js';
-import { geolocationGrpcConfig } from './config/grpc.config.js';
+import { UserGatewayController } from './application/controllers/user.gateway.controller.js';
+import { TransactionGatewayController } from './application/controllers/transaction.gateway.controller.js';
+import {
+  geolocationGrpcConfig,
+  userGrpcConfig,
+  accountGrpcConfig,
+} from './config/grpc.config.js';
+import { AuthGuard } from './application/guards/auth.guard.js';
 
 @Module({
   imports: [
@@ -9,11 +17,30 @@ import { geolocationGrpcConfig } from './config/grpc.config.js';
       {
         name: 'GEOLOCATION_PACKAGE',
         transport: Transport.GRPC,
-        options: geolocationGrpcConfig as GrpcOptions['options'],
+        options: geolocationGrpcConfig,
+      },
+      {
+        name: 'USER_PACKAGE',
+        transport: Transport.GRPC,
+        options: userGrpcConfig,
+      },
+      {
+        name: 'ACCOUNT_PACKAGE',
+        transport: Transport.GRPC,
+        options: accountGrpcConfig,
       },
     ]),
   ],
-  controllers: [GeolocationGatewayController],
-  providers: [],
+  controllers: [
+    GeolocationGatewayController,
+    UserGatewayController,
+    TransactionGatewayController,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule { }

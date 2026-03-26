@@ -23,8 +23,9 @@
     "test:unit": "NODE_OPTIONS='--experimental-vm-modules' jest --testRegex \".*\\\\.unit\\\\.spec\\\\.ts$\""
   },
   "dependencies": {
-    "@clement.pasteau/contracts": "1.0.0",
-    "@clement.pasteau/shared": "1.0.0",
+    "@clement.pasteau/account-service": "0.4.4",
+    "@clement.pasteau/contracts": "1.1.0",
+    "@clement.pasteau/shared": "1.1.0",
     "@grpc/grpc-js": "^1.14.3",
     "@grpc/proto-loader": "^0.8.0",
     "@nestjs/common": "^11.0.1",
