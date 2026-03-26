@@ -25,6 +25,21 @@ services:
       interval: 10s
       timeout: 3s
       retries: 3
+  neo4j:
+    image: neo4j:latest
+    container_name: spend_neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: neo4j/password
+    volumes:
+      - neo4j_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'RETURN 1' | cypher-shell -u neo4j -p password"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
   minio:
     image: minio/minio
     container_name: spend_minio
@@ -42,4 +57,5 @@ volumes:
   redis_data:
   postgres_data:
   postgres_test_data:
+  neo4j_data:
   minio_data:

@@ -15,13 +15,13 @@ export class UserService {
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly usersRepository: IUserRepository,
-  ) {}
+  ) { }
 
-  public async register(userEntity: UserEntity): Promise<void> {
+  public async register(userEntity: UserEntity): Promise<UserEntity> {
     if (await this.usersRepository.findByEmail(userEntity.email)) {
       throw new UserAlreadyExistsException(userEntity.email);
     }
-    await this.usersRepository.save(userEntity);
+    return await this.usersRepository.save(userEntity);
   }
 
   public async login(userEntity: UserEntity): Promise<void> {

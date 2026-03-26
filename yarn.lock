@@ -1108,33 +1108,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clement.pasteau/contracts@link:../../spend-libs/packages/contracts::locator=user-service%40workspace%3Auser-service":
-  version: 0.0.0-use.local
-  resolution: "@clement.pasteau/contracts@link:../../spend-libs/packages/contracts::locator=user-service%40workspace%3Auser-service"
-  languageName: node
-  linkType: soft
-
-"@clement.pasteau/contracts@npm:0.7.2":
-  version: 0.7.2
-  resolution: "@clement.pasteau/contracts@npm:0.7.2"
+"@clement.pasteau/account-service@npm:0.4.4":
+  version: 0.4.4
+  resolution: "@clement.pasteau/account-service@npm:0.4.4"
   dependencies:
-    protobufjs: "npm:7.5.3"
-  peerDependencies:
-    "@nestjs/microservices": ^11.0.0
-    rxjs: ^7.0.0
-  checksum: 10c0/e37e49345a2e6aa434c96665e1e7ef0669ea29c5e6e237a6fcaffd2291c48e30217e2f7d8bf3468f7d4d2ba63f49c9617b3d1115ca9a991624ace9ef77b2e712
+    "@clement.pasteau/shared": "npm:^1.1.0"
+    typeorm: "npm:^0.3.28"
+  checksum: 10c0/ad4060e1b68775070443ddfb2c99a744630e4eea7798d7da66147cc6fd8b7132377a8baf4253edca94d8927b2fe1e55f65988ba95785a210b394161803cf2619
   languageName: node
   linkType: hard
 
-"@clement.pasteau/contracts@npm:1.0.0":
-  version: 1.0.0
-  resolution: "@clement.pasteau/contracts@npm:1.0.0"
+"@clement.pasteau/contracts@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@clement.pasteau/contracts@npm:1.1.0"
   dependencies:
     protobufjs: "npm:7.5.3"
   peerDependencies:
     "@nestjs/microservices": ^11.0.0
     rxjs: ^7.0.0
-  checksum: 10c0/49a4f93b000a771dada3c613b80b96343a388980d8219b45adf974dbd829c6218d30bc5e39a770f3a5f3967786a9d596eae9de46bb9f34c2f4d2b137067656bd
+  checksum: 10c0/5422837e063e479461c8a82af038d363e43a1c3539bd3bd86b209b1f366977605de011a327b6bd59f531474c2c183550322bed9083de489bc07f9da27b454ea0
   languageName: node
   linkType: hard
 
@@ -1150,10 +1142,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clement.pasteau/shared@npm:1.0.0":
-  version: 1.0.0
-  resolution: "@clement.pasteau/shared@npm:1.0.0"
-  checksum: 10c0/f7d634a453b346d72d7894bce780caa3d42f6c7e66b17345b7c88a3fb2e8643c0e939287ae19615aad8c49f36935a7ddfcfa4ff2316c90703f1b0d4a9888b397
+"@clement.pasteau/shared@npm:1.1.0, @clement.pasteau/shared@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@clement.pasteau/shared@npm:1.1.0"
+  checksum: 10c0/2232dba733a87703fad30b6059ebcacc3c70ba18010855a5a0a7bc63b4f0878fbc042490b12cb2ee9d135b74bac108c10efe2089e4bfba8cdc1bb4523ab91909
+  languageName: node
+  linkType: hard
+
+"@clement.pasteau/user-service@npm:0.4.2":
+  version: 0.4.2
+  resolution: "@clement.pasteau/user-service@npm:0.4.2"
+  dependencies:
+    "@clement.pasteau/shared": "npm:^1.1.0"
+    reflect-metadata: "npm:^0.2.2"
+    typeorm: "npm:^0.3.28"
+  checksum: 10c0/1d02b4ff283da5f7c09d8c0095a40a05b2ecf9b579d5377096e6c459b80775eaf6d8747617e4e835e458cc97ffe079d27cd5d538b8589c3e2560d59f45fe8040
   languageName: node
   linkType: hard
 
@@ -4643,11 +4646,16 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "account-service@workspace:account-service"
   dependencies:
+    "@clement.pasteau/contracts": "npm:1.1.0"
+    "@clement.pasteau/shared": "npm:1.1.0"
     "@eslint/eslintrc": "npm:^3.2.0"
     "@eslint/js": "npm:^9.18.0"
+    "@grpc/grpc-js": "npm:^1.14.3"
+    "@grpc/proto-loader": "npm:^0.8.0"
     "@nestjs/cli": "npm:^11.0.0"
     "@nestjs/common": "npm:^11.0.1"
     "@nestjs/core": "npm:^11.0.1"
+    "@nestjs/microservices": "npm:^11.1.17"
     "@nestjs/platform-express": "npm:^11.0.1"
     "@nestjs/schematics": "npm:^11.0.0"
     "@nestjs/testing": "npm:^11.1.15"
@@ -4659,7 +4667,9 @@ __metadata:
     eslint-config-prettier: "npm:^10.0.1"
     eslint-plugin-prettier: "npm:^5.2.2"
     globals: "npm:^16.0.0"
+    ioredis: "npm:^5.10.0"
     jest: "npm:^30.2.0"
+    neo4j-driver: "npm:^5.28.0"
     prettier: "npm:^3.4.2"
     reflect-metadata: "npm:^0.2.2"
     rxjs: "npm:^7.8.1"
@@ -4875,8 +4885,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "api-gateway@workspace:api-gateway"
   dependencies:
-    "@clement.pasteau/contracts": "npm:1.0.0"
-    "@clement.pasteau/shared": "npm:1.0.0"
+    "@clement.pasteau/account-service": "npm:0.4.4"
+    "@clement.pasteau/contracts": "npm:1.1.0"
+    "@clement.pasteau/shared": "npm:1.1.0"
     "@eslint/eslintrc": "npm:^3.2.0"
     "@eslint/js": "npm:^9.18.0"
     "@grpc/grpc-js": "npm:^1.14.3"
@@ -7121,8 +7132,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "geolocalisation-service@workspace:geolocalisation-service"
   dependencies:
-    "@clement.pasteau/contracts": "npm:1.0.0"
-    "@clement.pasteau/shared": "npm:1.0.0"
+    "@clement.pasteau/contracts": "npm:1.1.0"
+    "@clement.pasteau/shared": "npm:1.1.0"
     "@eslint/eslintrc": "npm:^3.2.0"
     "@eslint/js": "npm:^9.18.0"
     "@grpc/grpc-js": "npm:^1.14.3"
@@ -7149,6 +7160,7 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.2.2"
     geojson: "npm:^0.5.0"
     globals: "npm:^16.0.0"
+    ioredis: "npm:^5.10.0"
     jest: "npm:^30.2.0"
     pg: "npm:^8.20.0"
     prettier: "npm:^3.4.2"
@@ -8991,6 +9003,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"neo4j-driver-bolt-connection@npm:5.28.3":
+  version: 5.28.3
+  resolution: "neo4j-driver-bolt-connection@npm:5.28.3"
+  dependencies:
+    buffer: "npm:^6.0.3"
+    neo4j-driver-core: "npm:5.28.3"
+    string_decoder: "npm:^1.3.0"
+  checksum: 10c0/80003b7a3544c8c28e7a0873acb7409283f839367b68cba801ee545858070f18912ee1a03cd10f9ec4aa1c440a4f81a84b979a3cb811b87b592d4585ac548d54
+  languageName: node
+  linkType: hard
+
+"neo4j-driver-core@npm:5.28.3":
+  version: 5.28.3
+  resolution: "neo4j-driver-core@npm:5.28.3"
+  checksum: 10c0/86f70793eef16e80334dc19c1d3321997048b9e8e14b0c77177dbac61e5a183fb05bede16e3ef81301b6deb7d5629cbfd2281428bb31b47e2439a6bb5dc596a9
+  languageName: node
+  linkType: hard
+
+"neo4j-driver@npm:^5.28.0":
+  version: 5.28.3
+  resolution: "neo4j-driver@npm:5.28.3"
+  dependencies:
+    neo4j-driver-bolt-connection: "npm:5.28.3"
+    neo4j-driver-core: "npm:5.28.3"
+    rxjs: "npm:^7.8.2"
+  checksum: 10c0/5a4f388e634f0ca6db72483ac91e1242af394938c055a4e1fe4a847b27f594d4c70ad9d266de80c5c058c8617762b44887b38f5a4dfea5bca60874c4cd19574d
+  languageName: node
+  linkType: hard
+
 "node-abort-controller@npm:^3.0.1":
   version: 3.1.1
   resolution: "node-abort-controller@npm:3.1.1"
@@ -9890,7 +9931,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.8.1":
+"rxjs@npm:^7.8.1, rxjs@npm:^7.8.2":
   version: 7.8.2
   resolution: "rxjs@npm:7.8.2"
   dependencies:
@@ -10265,7 +10306,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "spend-back-root@workspace:."
   dependencies:
-    "@clement.pasteau/contracts": "npm:0.7.2"
+    "@clement.pasteau/account-service": "npm:0.4.4"
+    "@clement.pasteau/contracts": "npm:1.1.0"
+    "@clement.pasteau/shared": "npm:1.1.0"
+    "@clement.pasteau/user-service": "npm:0.4.2"
   languageName: unknown
   linkType: soft
 
@@ -11327,7 +11371,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "user-service@workspace:user-service"
   dependencies:
-    "@clement.pasteau/contracts": "link:../../spend-libs/packages/contracts"
+    "@clement.pasteau/account-service": "npm:0.4.4"
+    "@clement.pasteau/contracts": "npm:1.1.0"
+    "@clement.pasteau/shared": "npm:1.1.0"
     "@eslint/eslintrc": "npm:^3.2.0"
     "@eslint/js": "npm:^9.18.0"
     "@grpc/grpc-js": "npm:^1.14.3"
