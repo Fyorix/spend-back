@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package account;
+
+import "account/account.query.proto";
+
+service AccountService {
+  rpc CreateTransaction (CreateTransactionRequest) returns (TransactionResponse);
+  rpc GetTransactions (ListTransactionsRequest) returns (ListTransactionsResponse);
+}

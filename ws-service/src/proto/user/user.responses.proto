@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package user;
+
+import "user/user.proto";
+
+message TokenResponse {
+  string access_token = 1;
+  int32 expires_in = 2;
+}
+
+message UserResponse {
+  User user = 1;
+}
+
+message VerifyTokenResponse {
+  bool isValid = 1;
+  string userId = 2;
+}
+
+message EmptyResponse {}

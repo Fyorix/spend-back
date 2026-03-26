@@ -7,7 +7,7 @@ import { EventTag } from '@clement.pasteau/contracts';
 
 @Injectable()
 export class Neo4jTransactionRepository implements ITransactionRepository {
-  constructor(@Inject(NEO4J_DRIVER) private readonly driver: Driver) { }
+  constructor(@Inject(NEO4J_DRIVER) private readonly driver: Driver) {}
 
   async save(transaction: TransactionEntity): Promise<TransactionEntity> {
     const session = this.driver.session();
@@ -69,7 +69,7 @@ export class Neo4jTransactionRepository implements ITransactionRepository {
           id: node.properties.id || '',
           name: node.properties.name || '',
           price: node.properties.price || 0,
-          tag: node.properties.tag as any,
+          tag: node.properties.tag,
           userId: userId,
           createdAt: node.properties.createdAt || '',
         };

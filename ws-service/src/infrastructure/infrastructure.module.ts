@@ -1,10 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Module, Global } from '@nestjs/common';
 import { RedisModule } from './redis/redis.module.js';
 import { RedisPubService } from './redis/redis-pub.service.js';
 
+@Global()
 @Module({
-  imports: [RedisModule],
+  imports: [
+    RedisModule,
+  ],
   providers: [RedisPubService],
   exports: [RedisPubService],
 })
-export class InfrastructureModule {}
+export class InfrastructureModule { }

@@ -12,7 +12,14 @@ import { loadEnvConfig } from '../../config/env.config.js';
         return new Redis({ host: config.redisHost, port: config.redisPort });
       },
     },
+    {
+      provide: 'REDIS_PUBLISHER',
+      useFactory: () => {
+        const config = loadEnvConfig();
+        return new Redis({ host: config.redisHost, port: config.redisPort });
+      },
+    },
   ],
-  exports: ['REDIS_SUBSCRIBER'],
+  exports: ['REDIS_SUBSCRIBER', 'REDIS_PUBLISHER'],
 })
-export class RedisModule { }
+export class RedisModule {}

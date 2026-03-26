@@ -48,9 +48,7 @@ describe('GoogleMapsProvider (Unit)', () => {
 
   it('should return null if fetch throws error', async () => {
     const address = 'Empty';
-    const fetchSpy = jest
-      .spyOn(global, 'fetch')
-      .mockRejectedValue(new Error('Network error'));
+    const fetchSpy = jest.spyOn(global, 'fetch').mockRejectedValue(new Error('Network error'));
 
     const result = await provider.geocode(address);
 

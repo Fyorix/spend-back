@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
 import {
   DATABASE_DEV_CONF,
   DATABASE_PROD_CONFIG,
@@ -18,7 +16,6 @@ const isRuntimeEnvConfig =
     ),
     UserModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+
 })
-export class AppModule {}
+export class AppModule { }

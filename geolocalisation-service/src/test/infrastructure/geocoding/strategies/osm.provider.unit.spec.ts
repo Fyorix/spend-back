@@ -1,9 +1,6 @@
 import { OpenStreetMapProvider } from '../../../../infrastructure/geocoding/strategies/osm.provider.js';
 import { jest } from '@jest/globals';
-import {
-  createMockFetchResponse,
-  createOsmGeocodeResponse,
-} from '../../../helpers/factories.js';
+import { createMockFetchResponse, createOsmGeocodeResponse } from '../../../helpers/factories.js';
 
 describe('OpenStreetMapProvider (Unit)', () => {
   let provider: OpenStreetMapProvider;
@@ -47,9 +44,7 @@ describe('OpenStreetMapProvider (Unit)', () => {
 
   it('should return null if fetch throws error', async () => {
     const address = 'Empty';
-    const fetchSpy = jest
-      .spyOn(global, 'fetch')
-      .mockRejectedValue(new Error('Network error'));
+    const fetchSpy = jest.spyOn(global, 'fetch').mockRejectedValue(new Error('Network error'));
 
     const result = await provider.geocode(address);
 

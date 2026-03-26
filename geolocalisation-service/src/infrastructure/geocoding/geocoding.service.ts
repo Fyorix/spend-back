@@ -16,17 +16,12 @@ export class GeocodingService {
   constructor() {
     const config = loadEnvConfig();
     this.providers = {
-      [GeocodingProviderType.GOOGLE_MAPS]: new GoogleMapsProvider(
-        config.googleMapsApiKey,
-      ),
+      [GeocodingProviderType.GOOGLE_MAPS]: new GoogleMapsProvider(config.googleMapsApiKey),
       [GeocodingProviderType.OPEN_STREET_MAP]: new OpenStreetMapProvider(),
     };
   }
 
-  async geocode(
-    address: string,
-    providerName: GeocodingProviderType,
-  ): Promise<Coordinate | null> {
+  async geocode(address: string, providerName: GeocodingProviderType): Promise<Coordinate | null> {
     const provider = this.providers[providerName];
     if (!provider) return null;
 

@@ -6,7 +6,7 @@ import { REDIS_PUBLISHER } from './redis.constants.js';
 export class RedisPubService {
   private readonly logger = new Logger(RedisPubService.name);
 
-  constructor(@Inject(REDIS_PUBLISHER) private readonly publisher: Redis) { }
+  constructor(@Inject(REDIS_PUBLISHER) private readonly publisher: Redis) {}
 
   async publish(channel: string, payload: unknown): Promise<void> {
     try {

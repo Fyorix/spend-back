@@ -3,5 +3,5 @@ export enum RedisChannel {
   USER_EVENTS = 'user_events',
   NOTIFICATION = 'notification',
   FILE_EVENTS = 'file_events',
-  GEOLOCATION_UPDATES = 'geolocation_updates',
+  GEOLOCATION_UPDATES = 'map_events',
 }

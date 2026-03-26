@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package file;
+
+message File {
+  string id = 1;
+  string userId = 2;
+  string originalName = 3;
+  string minioKey = 4;
+  string mimeType = 5;
+  int64 size = 6;
+}

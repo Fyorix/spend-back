@@ -2,11 +2,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import { EventTag } from '@clement.pasteau/shared';
 import { GeocodingService } from '../../infrastructure/geocoding/geocoding.service.js';
 import { GeolocalisationRepository } from '../../infrastructure/database/geolocalisation.repository.js';
-import {
-  Coordinate,
-  GeocodingProviderType,
-} from '../../domain/geocoding/geocoding.provider.js';
+import { Coordinate, GeocodingProviderType } from '../../domain/geocoding/geocoding.provider.js';
 import { NearbyTransaction } from '../../domain/geocoding/geolocalisation.interface.js';
+import { MapZoneModel } from '../../infrastructure/database/models/map-zone.model.js';
 
 @Injectable()
 export class GeolocationApplicationService {
@@ -23,23 +21,26 @@ export class GeolocationApplicationService {
     amount: number,
     provider: GeocodingProviderType = GeocodingProviderType.OPEN_STREET_MAP,
     tag: EventTag,
-  ): Promise<Coordinate | null> {
-    const coordinate = await this.geocodingService.geocode(address, provider);
+  ): Promise<{ coordinate: Coordinate; zone: MapZoneModel } | null> {
+    const coordinate: Coordinate | null = await this.geocodingService.geocode(address, provider);
     if (!coordinate) {
       this.logger.warn(`Could not geocode address: ${address}`);
       return null;
     }
 
-    await this.geolocalisationRepository.addTransaction(
-      transactionId,
-      coordinate,
-      amount,
+    await this.geolocalisationRepository.addTransaction(transactionId, coordinate, amount, tag);
+
+    const zone = await this.geolocalisationRepository.upsertZone(
+      coordinate.latitude,
+      coordinate.longitude,
       tag,
     );
+
     this.logger.log(
-      `Tracked transaction ${transactionId} at ${coordinate.latitude}, ${coordinate.longitude} with tag ${tag}`,
+      `Tracked transaction ${transactionId} at ${coordinate.latitude}, ${coordinate.longitude} (Zone ${zone.id}, weight ${zone.weight})`,
     );
-    return coordinate;
+
+    return { coordinate, zone };
   }
 
   async getNearbyTransactions(
@@ -54,5 +55,9 @@ export class GeolocationApplicationService {
       radiusKm,
       tag,
     );
+  }
+
+  async getZones(tag?: EventTag): Promise<MapZoneModel[]> {
+    return this.geolocalisationRepository.getAllZones(tag);
   }
 }

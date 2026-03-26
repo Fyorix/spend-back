@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package user;
+
+import "user/user.command.proto";
+import "user/user.query.proto";
+import "user/user.responses.proto";
+
+service UserService {
+  rpc Register(RegisterRequest) returns (TokenResponse);
+  rpc Login(LoginRequest) returns (TokenResponse);
+  rpc VerifyToken(VerifyTokenRequest) returns (VerifyTokenResponse);
+  rpc GetMe(GetUserRequest) returns (UserResponse);
+  rpc DeleteUser(DeleteUserRequest) returns (EmptyResponse);
+}

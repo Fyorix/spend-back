@@ -21,10 +21,7 @@ describe('GeolocationApplicationService (Unit)', () => {
       findNearbyTransactions: jest.fn(),
     } as unknown as GeolocalisationRepository;
 
-    service = new GeolocationApplicationService(
-      mockGeocodingService,
-      mockRepository,
-    );
+    service = new GeolocationApplicationService(mockGeocodingService, mockRepository);
   });
 
   afterEach(() => {
@@ -39,29 +36,14 @@ describe('GeolocationApplicationService (Unit)', () => {
     const provider = GeocodingProviderType.OPEN_STREET_MAP;
     const tag = EventTag.FOOD;
 
-    const geocodeSpy = jest
-      .spyOn(mockGeocodingService, 'geocode')
-      .mockResolvedValue(coordinate);
-    const addTransactionSpy = jest
-      .spyOn(mockRepository, 'addTransaction')
-      .mockResolvedValue();
+    const geocodeSpy = jest.spyOn(mockGeocodingService, 'geocode').mockResolvedValue(coordinate);
+    const addTransactionSpy = jest.spyOn(mockRepository, 'addTransaction').mockResolvedValue();
 
-    const result = await service.trackTransaction(
-      transactionId,
-      address,
-      amount,
-      provider,
-      tag,
-    );
+    const result = await service.trackTransaction(transactionId, address, amount, provider, tag);
 
     expect(result).toEqual(coordinate);
     expect(geocodeSpy).toHaveBeenCalledWith(address, provider);
-    expect(addTransactionSpy).toHaveBeenCalledWith(
-      transactionId,
-      coordinate,
-      amount,
-      tag,
-    );
+    expect(addTransactionSpy).toHaveBeenCalledWith(transactionId, coordinate, amount, tag);
   });
 
   it('should return null if geocoding fails', async () => {
@@ -70,9 +52,7 @@ describe('GeolocationApplicationService (Unit)', () => {
     const amount = 100.5;
     const tag = EventTag.FOOD;
 
-    const geocodeSpy = jest
-      .spyOn(mockGeocodingService, 'geocode')
-      .mockResolvedValue(null);
+    const geocodeSpy = jest.spyOn(mockGeocodingService, 'geocode').mockResolvedValue(null);
 
     const addTransactionSpy = jest.spyOn(mockRepository, 'addTransaction');
 
@@ -85,10 +65,7 @@ describe('GeolocationApplicationService (Unit)', () => {
     );
 
     expect(result).toBeNull();
-    expect(geocodeSpy).toHaveBeenCalledWith(
-      address,
-      GeocodingProviderType.OPEN_STREET_MAP,
-    );
+    expect(geocodeSpy).toHaveBeenCalledWith(address, GeocodingProviderType.OPEN_STREET_MAP);
     expect(addTransactionSpy).not.toHaveBeenCalled();
   });
 

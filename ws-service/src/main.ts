@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
 import { Logger } from '@nestjs/common';
 import { loadEnvConfig } from './config/env.config.js';
+import { RedisIoAdapter } from './gateway/redis-io.adapter.js';
 
 async function bootstrap() {
   const config = loadEnvConfig();
@@ -9,9 +10,13 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
 
-  await app.listen(config.port);
+  const redisIoAdapter = new RedisIoAdapter(app);
+  await redisIoAdapter.connectToRedis();
+  app.useWebSocketAdapter(redisIoAdapter);
+
+  await app.listen(config.port, '0.0.0.0');
   logger.log(`WebSocket Server is running on: http://localhost:${config.port}`);
-  logger.log('Redis Pub/Sub is active');
+  logger.log('Redis Adpater (Synchronization) is active');
 }
 bootstrap().catch((err) => {
   console.error(err);
