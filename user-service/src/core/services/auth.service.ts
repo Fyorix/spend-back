@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotImplementedException } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ACCESS_TOKEN_DURATION } from '../../module/user.constants.js';
 import { TokenResponseDto } from '../../dtos/token-response.dto.js';
@@ -19,7 +19,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     @Inject(ACCESS_TOKEN_DURATION) private readonly accessTokenDuration: number,
     @Inject(USER_REPOSITORY) private readonly userRepository: IUserRepository,
-  ) {}
+  ) { }
 
   async login(userConnectDto: UserConnectDto): Promise<TokenResponseDto> {
     const user: UserEntity | null = await this.userRepository.findByEmail(
@@ -37,16 +37,18 @@ export class AuthService {
     const token = await this.jwtService.signAsync(payload, {
       expiresIn: this.accessTokenDuration,
     });
+    Logger.log('token', token);
     return { accessToken: token, expiresIn: this.accessTokenDuration };
   }
 
-  /**
-   * This method is intended to generate an internal token for service-to-service communication.
-   * not implemented yet, as it requires a more complex setup with service identities and permissions.
-   */
-  async generateInternalToken(_serviceId: string): Promise<void> {
-    throw new NotImplementedException(
-      'Internal token generation not implemented yet',
-    );
+  async verifyToken(
+    token: string,
+  ): Promise<{ isValid: boolean; userId: string }> {
+    try {
+      const payload: { sub: string } = await this.jwtService.verifyAsync(token);
+      return { isValid: true, userId: payload.sub };
+    } catch {
+      return { isValid: false, userId: '' };
+    }
   }
 }

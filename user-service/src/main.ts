@@ -25,7 +25,6 @@ async function bootstrap() {
       protoPath: join(contractsPath, 'proto/user/user.services.proto'),
       url: '0.0.0.0:50051',
       loader: {
-        keepCase: true,
         longs: String,
         enums: String,
         defaults: true,
