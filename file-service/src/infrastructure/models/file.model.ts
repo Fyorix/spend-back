@@ -7,14 +7,20 @@ export class FileModel {
   id: string = randomUUID();
 
   @Column()
-  userId: string = '';
+  userId!: string;
 
   @Column()
-  originalName: string = '';
+  originalName!: string;
 
   @Column()
-  mimeType: string = '';
+  minioKey!: string;
 
   @Column()
-  size: number = 0;
+  mimeType!: string;
+
+  @Column()
+  size!: number;
+
+  @Column()
+  status!: string;
 }

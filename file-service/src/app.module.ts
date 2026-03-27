@@ -11,6 +11,8 @@ import {
   DATABASE_DEV_CONF,
   DATABASE_PROD_CONFIG,
 } from './config/database.config.js';
+import { S3Service } from './infrastructure/s3/s3.service.js';
+import { FileEntity } from './domain/entities/file.entity.js';
 
 const isRuntimeEnvConfig =
   process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test';
@@ -20,7 +22,7 @@ const isRuntimeEnvConfig =
     TypeOrmModule.forRoot(
       isRuntimeEnvConfig ? DATABASE_PROD_CONFIG : DATABASE_DEV_CONF,
     ),
-    TypeOrmModule.forFeature([FileModel]),
+    TypeOrmModule.forFeature([FileModel, FileEntity]),
     RedisModule,
   ],
   controllers: [FileCommandController, FileQueryController],
@@ -30,6 +32,7 @@ const isRuntimeEnvConfig =
       provide: FILE_REPOSITORY,
       useClass: FileRepositoryImpl,
     },
+    S3Service,
   ],
 })
 export class AppModule {}
