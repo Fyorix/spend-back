@@ -37,7 +37,7 @@ export class S3Service implements OnModuleInit {
         new HeadBucketCommand({ Bucket: this.bucketName }),
       );
       this.logger.log(`Bucket "${this.bucketName}" already exists.`);
-    } catch (error) {
+    } catch (error: unknown) {
       if ((error as any).$metadata?.httpStatusCode === 404) {
         this.logger.warn(
           `Bucket "${this.bucketName}" does not exist. Creating...`,
@@ -47,18 +47,12 @@ export class S3Service implements OnModuleInit {
             new CreateBucketCommand({ Bucket: this.bucketName }),
           );
           this.logger.log(`Bucket "${this.bucketName}" created successfully.`);
-        } catch (createError) {
-          this.logger.error(
-            `Error creating bucket "${this.bucketName}": ${
-              (createError as Error).message
-            }`,
-          );
+        } catch (createError: unknown) {
+          this.logError(createError, `Error creating bucket "${this.bucketName}"`);
           throw createError;
         }
       } else {
-        this.logger.error(
-          `Error checking bucket "${this.bucketName}": ${(error as Error).message}`,
-        );
+        this.logError(error, `Error checking bucket "${this.bucketName}" existence`);
         throw error;
       }
     }
@@ -78,11 +72,17 @@ export class S3Service implements OnModuleInit {
     try {
       await this.s3Client.send(command);
       this.logger.log(`File uploaded successfully: ${minioKey}`);
-    } catch (error) {
-      this.logger.error(
-        `Error uploading file ${minioKey} in MinIO: ${(error as Error).message}`,
-      );
+    } catch (error: unknown) {
+      this.logError(error, `Error uploading file "${minioKey}" to bucket "${this.bucketName}"`);
       throw error;
     }
   }
+
+  private logError(error: unknown, message: string) : void{
+  if (error instanceof Error) {
+    console.error(`${message}: ${error.message}`);
+  } else {
+    console.error(`${message}:`, error);
+  }
+}
 }

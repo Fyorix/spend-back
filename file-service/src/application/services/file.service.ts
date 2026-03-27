@@ -43,9 +43,14 @@ export class FileService {
       savedFile.status = FileStatus.COMPLETED;
       await this.fileRepository.save(savedFile);
       return savedFile;
-    } catch (error) {
+    } catch (error: unknown) {
       savedFile.status = FileStatus.FAILED;
       await this.fileRepository.save(savedFile);
+      if (error instanceof Error) {
+        console.error(`Error uploading file ${file.minioKey} in MinIO: ${error.message}`);
+      } else {
+        console.error(`Error uploading file ${file.minioKey} in MinIO:`, error);
+      }
       throw error;
     }
   }
