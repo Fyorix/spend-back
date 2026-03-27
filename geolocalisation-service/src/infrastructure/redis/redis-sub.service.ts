@@ -8,7 +8,7 @@ import {
   type ZoneUpdatedEvent,
   type TransactionPingedEvent,
 } from '@clement.pasteau/shared';
-import { Coordinate } from '../../domain/geocoding/geocoding.provider.js';
+import { Coordinate, GeocodingProviderType } from '../../domain/geocoding/geocoding.provider.js';
 import { MapZoneModel } from '../database/models/map-zone.model.js';
 
 @Injectable()
@@ -59,7 +59,7 @@ export class RedisSubService implements OnModuleInit, OnModuleDestroy {
         payload.transactionId,
         payload.address,
         payload.amount,
-        undefined,
+        (payload.provider as GeocodingProviderType) || GeocodingProviderType.GOOGLE_MAPS,
         payload.tag,
       );
 

@@ -15,6 +15,11 @@ export class GeocodingService {
 
   constructor() {
     const config = loadEnvConfig();
+    if (!config.googleMapsApiKey) {
+      this.logger.warn('Google Maps API key is missing or empty in environment configuration.');
+    } else {
+      this.logger.log(`Google Maps provider initialized with key: ${config.googleMapsApiKey.substring(0, 6)}...`);
+    }
     this.providers = {
       [GeocodingProviderType.GOOGLE_MAPS]: new GoogleMapsProvider(config.googleMapsApiKey),
       [GeocodingProviderType.OPEN_STREET_MAP]: new OpenStreetMapProvider(),
@@ -34,6 +39,23 @@ export class GeocodingService {
     } catch (error) {
       this.logger.error(`Geocoding failed for ${providerName}`, error);
     }
+
+    const fallbackName = providerName === GeocodingProviderType.GOOGLE_MAPS
+      ? GeocodingProviderType.OPEN_STREET_MAP
+      : GeocodingProviderType.GOOGLE_MAPS;
+
+    this.logger.warn(`Provider ${providerName} failed for ${address}, falling back to ${fallbackName}`);
+
+    try {
+      const result = await this.providers[fallbackName].geocode(address);
+      if (result) {
+        this.logger.log(`Successfully geocoded using fallback ${fallbackName}`);
+        return result;
+      }
+    } catch (error) {
+      this.logger.error(`Fallback geocoding failed for ${fallbackName}`, error);
+    }
+
     return null;
   }
 }

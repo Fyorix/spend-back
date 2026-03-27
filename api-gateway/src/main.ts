@@ -49,6 +49,7 @@ async function bootstrap() {
   logger.log(`Local:   http://localhost:${env.port}`);
   logger.log(`Network: http://${localIp}:${env.port}`);
   logger.log(`Swagger: http://${localIp}:${env.port}/api`);
+
 }
 
 bootstrap().catch((err) => {

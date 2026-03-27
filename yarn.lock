@@ -1128,29 +1128,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clement.pasteau/contracts@npm:1.3.1":
-  version: 1.3.1
-  resolution: "@clement.pasteau/contracts@npm:1.3.1"
+"@clement.pasteau/contracts@npm:1.3.2":
+  version: 1.3.2
+  resolution: "@clement.pasteau/contracts@npm:1.3.2"
   dependencies:
     protobufjs: "npm:7.5.3"
   peerDependencies:
     "@nestjs/microservices": ^11.0.0
     rxjs: ^7.0.0
-  checksum: 10c0/59087e14f4b3d9509729b415e4a6b771a67aa630dbc6a225605a4f26b34603e1fba327b2746f1d2aad444a8cf248cafcd7fbefbedc218444bf0a0bce322f2bad
+  checksum: 10c0/7a786303344a077d8d9b55c7553da38618daf18f0d4ac09dd0dfb443a78d90a3a21831270e55123e2895b40402c0d33a8751fa8288608b5158949c1e296ff75f
   languageName: node
   linkType: hard
 
-"@clement.pasteau/shared@npm:1.3.0":
-  version: 1.3.0
-  resolution: "@clement.pasteau/shared@npm:1.3.0"
-  checksum: 10c0/e58de2792e219cd30d5313b3a1b43cddaa46a978072b385fb8af43a3851cc4b3d18c0060229d7e048c94a6712cc0b4b7d0fb79ed946281c0e2f506f01b5e887c
-  languageName: node
-  linkType: hard
-
-"@clement.pasteau/shared@npm:1.3.1":
-  version: 1.3.1
-  resolution: "@clement.pasteau/shared@npm:1.3.1"
-  checksum: 10c0/daec3eb7d246aa5f89f5d42f9047dfd0d0fceb733e7e4a7f6a6a4c2365249fafe16cb3938584c105497d3e06df74a020c14edf60d2fcc1a1714b7360d749c97e
+"@clement.pasteau/shared@npm:1.3.3":
+  version: 1.3.3
+  resolution: "@clement.pasteau/shared@npm:1.3.3"
+  checksum: 10c0/0a64a61b06c51eea3296b7435061ce12fda81b12967ef9b6c1852888b8cb9fd6451887909d889a6b9c873ba89ac7f0c84eb3c54c6638600aef0bca8487fa1be4
   languageName: node
   linkType: hard
 
@@ -4707,8 +4700,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "account-service@workspace:account-service"
   dependencies:
-    "@clement.pasteau/contracts": "npm:1.3.1"
-    "@clement.pasteau/shared": "npm:1.3.0"
+    "@clement.pasteau/contracts": "npm:1.3.2"
+    "@clement.pasteau/shared": "npm:1.3.3"
     "@eslint/eslintrc": "npm:^3.2.0"
     "@eslint/js": "npm:^9.18.0"
     "@grpc/grpc-js": "npm:^1.14.3"
@@ -4947,8 +4940,8 @@ __metadata:
   resolution: "api-gateway@workspace:api-gateway"
   dependencies:
     "@clement.pasteau/account-service": "npm:0.4.7"
-    "@clement.pasteau/contracts": "npm:1.3.1"
-    "@clement.pasteau/shared": "npm:1.3.0"
+    "@clement.pasteau/contracts": "npm:1.3.2"
+    "@clement.pasteau/shared": "npm:1.3.3"
     "@clement.pasteau/user-service": "npm:0.4.5"
     "@eslint/eslintrc": "npm:^3.2.0"
     "@eslint/js": "npm:^9.18.0"
@@ -6887,7 +6880,7 @@ __metadata:
   resolution: "file-service@workspace:file-service"
   dependencies:
     "@aws-sdk/client-s3": "npm:^3.1017.0"
-    "@clement.pasteau/contracts": "npm:1.3.1"
+    "@clement.pasteau/contracts": "npm:1.3.2"
     "@eslint/eslintrc": "npm:^3.2.0"
     "@eslint/js": "npm:^9.18.0"
     "@grpc/grpc-js": "npm:^1.14.3"
@@ -7226,8 +7219,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "geolocalisation-service@workspace:geolocalisation-service"
   dependencies:
-    "@clement.pasteau/contracts": "npm:1.3.1"
-    "@clement.pasteau/shared": "npm:1.3.0"
+    "@clement.pasteau/contracts": "npm:1.3.2"
+    "@clement.pasteau/shared": "npm:1.3.3"
     "@clement.pasteau/user-service": "npm:0.4.5"
     "@eslint/eslintrc": "npm:^3.2.0"
     "@eslint/js": "npm:^9.18.0"
@@ -10448,8 +10441,8 @@ __metadata:
   resolution: "spend-back-root@workspace:."
   dependencies:
     "@clement.pasteau/account-service": "npm:0.4.4"
-    "@clement.pasteau/contracts": "npm:1.3.1"
-    "@clement.pasteau/shared": "npm:1.3.0"
+    "@clement.pasteau/contracts": "npm:1.3.2"
+    "@clement.pasteau/shared": "npm:1.3.3"
     "@clement.pasteau/user-service": "npm:0.4.2"
   languageName: unknown
   linkType: soft
@@ -11520,8 +11513,8 @@ __metadata:
   resolution: "user-service@workspace:user-service"
   dependencies:
     "@clement.pasteau/account-service": "npm:0.4.4"
-    "@clement.pasteau/contracts": "npm:1.3.1"
-    "@clement.pasteau/shared": "npm:1.3.0"
+    "@clement.pasteau/contracts": "npm:1.3.2"
+    "@clement.pasteau/shared": "npm:1.3.3"
     "@eslint/eslintrc": "npm:^3.2.0"
     "@eslint/js": "npm:^9.18.0"
     "@grpc/grpc-js": "npm:^1.14.3"
@@ -11807,8 +11800,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "ws-service@workspace:ws-service"
   dependencies:
-    "@clement.pasteau/contracts": "npm:1.3.1"
-    "@clement.pasteau/shared": "npm:1.3.1"
+    "@clement.pasteau/contracts": "npm:1.3.2"
+    "@clement.pasteau/shared": "npm:1.3.3"
     "@clement.pasteau/user-service": "npm:0.4.5"
     "@eslint/eslintrc": "npm:^3.2.0"
     "@eslint/js": "npm:^9.18.0"
