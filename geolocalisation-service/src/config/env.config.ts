@@ -20,6 +20,6 @@ export function loadEnvConfig(): EnvConfig {
     dbName: process.env.DB_NAME || 'spend',
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY || '',
     redisHost: process.env.REDIS_HOST || 'localhost',
-    redisPort: parseInt(process.env.REDIS_PORT || '6379', 10),
+    redisPort: parseInt(process.env.REDIS_PORT || '6379', 10)
   };
 }

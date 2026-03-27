@@ -17,7 +17,7 @@ export class TransactionService {
     @Inject('TRANSACTION_REPOSITORY')
     private readonly transactionRepository: ITransactionRepository,
     private readonly redisPubService: RedisPubService,
-  ) {}
+  ) { }
 
   async createTransaction(request: CreateTransactionRequest): Promise<TransactionEntity> {
     const transaction: TransactionEntity = new TransactionEntity();
@@ -39,6 +39,7 @@ export class TransactionService {
           amount: savedTransaction.price,
           userId: savedTransaction.userId,
           tag: request.tag as unknown as EventTag,
+          provider: request.provider,
         },
       };
       await this.redisPubService.publish(this.ACCOUNT_EVENTS_CHANNEL, event);

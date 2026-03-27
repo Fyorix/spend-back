@@ -37,6 +37,9 @@ class CreateTransactionDto implements Omit<CreateTransactionRequest, 'userId'> {
 
   @ApiProperty({ example: '123 Main St, New York, NY', required: false })
   address!: string;
+
+  @ApiProperty({ example: 'GoogleMaps', required: false })
+  provider!: string;
 }
 
 @ApiTags('Transactions')
@@ -65,6 +68,7 @@ export class TransactionGatewayController implements OnModuleInit {
         ...dto,
         userId: req.user.id,
         address: dto.address ?? '',
+        provider: dto.provider ?? '',
       }),
     );
   }
