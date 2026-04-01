@@ -9,8 +9,11 @@ import {
   geolocationGrpcConfig,
   userGrpcConfig,
   accountGrpcConfig,
+  fileGrpcConfig,
 } from './config/grpc.config.js';
 import { AuthGuard } from './application/guards/auth.guard.js';
+import { FileGatewayController } from './application/controllers/file.gateway.controller.js';
+import { FileGatewayService } from './application/services/file.gateway.service.js';
 
 @Module({
   imports: [
@@ -33,18 +36,25 @@ import { AuthGuard } from './application/guards/auth.guard.js';
         transport: Transport.GRPC,
         options: accountGrpcConfig,
       },
+      {
+        name: 'FILE_PACKAGE',
+        transport: Transport.GRPC,
+        options: fileGrpcConfig,
+      },
     ]),
   ],
   controllers: [
     GeolocationGatewayController,
     UserGatewayController,
     TransactionGatewayController,
+    FileGatewayController,
   ],
   providers: [
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    FileGatewayService,
   ],
 })
-export class AppModule { }
+export class AppModule {}

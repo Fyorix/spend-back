@@ -52,3 +52,16 @@ export const accountGrpcConfig: GrpcOptions['options'] = {
     includeDirs: [join(contractsPath, 'proto')],
   },
 };
+
+export const fileGrpcConfig: GrpcOptions['options'] = {
+  package: 'file',
+  protoPath: join(contractsPath, 'proto/file/file.services.proto'),
+  url: 'localhost:50054',
+  loader: {
+    longs: String,
+    enums: String,
+    defaults: true,
+    oneofs: true,
+    includeDirs: [join(contractsPath, 'proto')],
+  },
+};

@@ -20,7 +20,6 @@ export class FileService {
     size: number,
     chunks: Observable<Uint8Array>,
   ): Promise<FileEntity> {
-    // Creation of the file entity with status PENDING
     const file = new FileEntity();
     file.userId = userId;
     file.originalName = originalName;
