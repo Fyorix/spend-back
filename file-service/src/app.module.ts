@@ -10,6 +10,7 @@ import { FileModel } from './infrastructure/models/file.model.js';
 import { DATABASE_DEV_CONF, DATABASE_PROD_CONFIG } from './config/database.config.js';
 import { S3Service } from './infrastructure/s3/s3.service.js';
 import { FileEntity } from './domain/entities/file.entity.js';
+import { JwtModule } from '@nestjs/jwt';
 
 const isRuntimeEnvConfig = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test';
 
@@ -18,6 +19,9 @@ const isRuntimeEnvConfig = process.env.NODE_ENV === 'production' || process.env.
     TypeOrmModule.forRoot(isRuntimeEnvConfig ? DATABASE_PROD_CONFIG : DATABASE_DEV_CONF),
     TypeOrmModule.forFeature([FileModel, FileEntity]),
     RedisModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || "dev-jwt-secret",
+    }),
   ],
   controllers: [FileCommandController, FileQueryController],
   providers: [

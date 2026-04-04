@@ -1,15 +1,13 @@
 import {
   Controller,
-  Headers,
   Post,
-  Body,
   UseInterceptors,
   UploadedFile,
   ParseFilePipe,
   MaxFileSizeValidator,
   FileTypeValidator,
-  Req,
   UnauthorizedException,
+  Req,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -17,11 +15,17 @@ import {
   ApiBody,
   ApiConsumes,
   ApiOperation,
+  ApiProperty,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { FileGatewayService } from '../services/file.gateway.service.js';
 import 'multer';
+
+export class UploadFileDto {
+  @ApiProperty({ type: 'string', format: 'binary', example: 'file.jpg', required: true })
+  file!: Express.Multer.File;
+}
 
 @ApiTags('File')
 @Controller('files')
@@ -32,24 +36,11 @@ export class FileGatewayController {
   @UseInterceptors(FileInterceptor('file'))
   @ApiTags('File')
   @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    description: 'File upload',
-    type: 'multipart/form-data',
-    required: true,
-    schema: {
-      type: 'object',
-      properties: {
-        file: {
-          type: 'string',
-          format: 'binary',
-        },
-        userId: {
-          type: 'string',
-        },
-      },
-    },
-  })
   @ApiOperation({ summary: 'Upload a file' })
+  @ApiBody({
+    description: 'File to upload',
+    type: UploadFileDto,
+  })
   @ApiResponse({ status: 201, description: 'File uploaded successfully' })
   @ApiBearerAuth()
   async uploadFile(
@@ -62,9 +53,9 @@ export class FileGatewayController {
       }),
     )
     file: Express.Multer.File,
-    @Headers('authorization') authHeader: string,
+    @Req() request: any,
   ) {
-    const token = authHeader?.split(' ')[1];
+    const token = request.headers['authorization']?.split(' ')[1];
 
     if (!token) {
       throw new UnauthorizedException('Authorization token is missing');

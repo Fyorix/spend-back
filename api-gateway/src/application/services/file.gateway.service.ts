@@ -1,14 +1,15 @@
 import { FileServiceClient, UploadFileRequest } from '@clement.pasteau/contracts';
 import { Metadata } from '@grpc/grpc-js';
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import type { ClientGrpc } from '@nestjs/microservices';
-import { ReplaySubject } from 'rxjs';
+import { firstValueFrom, Subject } from 'rxjs';
 
 const CHUNK_SIZE = 64 * 1024;
 
 @Injectable()
 export class FileGatewayService implements OnModuleInit {
   private fileServiceClient!: FileServiceClient;
+  private readonly logger = new Logger(FileGatewayService.name);
   constructor(@Inject('FILE_PACKAGE') private readonly client: ClientGrpc) {}
 
   onModuleInit() {
@@ -19,24 +20,39 @@ export class FileGatewayService implements OnModuleInit {
     const metadata = new Metadata();
     metadata.add('Authorization', `Bearer ${token}`);
 
-    const uploadStream = new ReplaySubject<UploadFileRequest>();
+    const uploadStream = new Subject<UploadFileRequest>();
 
-    uploadStream.next({
-      metadata: {
-        userId:"",
-        originalName: file.originalname,
-        mimeType: file.mimetype,
-        size: file.size,
-      },
+    const response$ = (this.fileServiceClient as any).uploadFile(
+      uploadStream.asObservable(),
+      metadata,
+    );
+
+    const pushData = async () => {
+      uploadStream.next({
+        metadata: {
+          userId: '',
+          originalName: file.originalname,
+          mimeType: file.mimetype,
+          size: file.size,
+        },
+      } as UploadFileRequest);
+
+      for (let offset = 0; offset < file.buffer.length; offset += CHUNK_SIZE) {
+        const chunk = new Uint8Array(file.buffer.slice(offset, offset + CHUNK_SIZE));
+        uploadStream.next({ chunk } as UploadFileRequest);
+
+        await new Promise((r) => setImmediate(r));
+      }
+
+      this.logger.debug('Calling uploadStream.complete()');
+      uploadStream.complete();
+      this.logger.debug('uploadStream.complete() called - stream should close');
+    };
+
+    const responsePromise = firstValueFrom(response$);
+    pushData().catch((error: unknown) => {
+      uploadStream.error(error instanceof Error ? error : new Error('Upload stream failed'));
     });
-
-    
-    for (let offset = 0; offset < file.buffer.length; offset += CHUNK_SIZE) {
-      const chunk = file.buffer.slice(offset, offset + CHUNK_SIZE);
-      uploadStream.next({ chunk: new Uint8Array(chunk) });
-    }
-    uploadStream.complete();
-
-    return (this.fileServiceClient as any).uploadFile(uploadStream.asObservable(), metadata);
+    return responsePromise;
   }
 }

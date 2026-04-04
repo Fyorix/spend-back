@@ -5,13 +5,11 @@ import {
   GEOLOCATION_PACKAGE_NAME,
   USER_PACKAGE_NAME,
   ACCOUNT_PACKAGE_NAME,
+  FILE_PACKAGE_NAME,
 } from '@clement.pasteau/contracts';
 
 const require = createRequire(import.meta.url);
-const contractsPath = join(
-  require.resolve('@clement.pasteau/contracts/package.json'),
-  '..',
-);
+const contractsPath = join(require.resolve('@clement.pasteau/contracts/package.json'), '..');
 
 export const geolocationGrpcConfig: GrpcOptions['options'] = {
   package: GEOLOCATION_PACKAGE_NAME,
@@ -54,7 +52,7 @@ export const accountGrpcConfig: GrpcOptions['options'] = {
 };
 
 export const fileGrpcConfig: GrpcOptions['options'] = {
-  package: 'file',
+  package: FILE_PACKAGE_NAME,
   protoPath: join(contractsPath, 'proto/file/file.services.proto'),
   url: 'localhost:50054',
   loader: {

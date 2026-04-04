@@ -27,8 +27,8 @@ export class AuthGrpcGuard implements CanActivate {
 
     try {
       const payload = await this.jwtService.verifyAsync<JwtPayload>(token);
-      const data = rpcContext.getData<Record<string, any>>();
-      data.userId = payload.sub;
+      const metadata = context.switchToRpc().getContext<Metadata>();
+      metadata.set('userId', payload.sub);
       return true;
     } catch {
       throw new UnauthorizedException('Authentication failed');
