@@ -11,19 +11,15 @@ async function bootstrap() {
   const config = loadEnvConfig();
   const app = await NestFactory.create(AppModule);
 
-  const contractsPath = join(
-    require.resolve('@clement.pasteau/contracts/package.json'),
-    '..',
-  );
+  const contractsPath = join(require.resolve('@clement.pasteau/contracts/package.json'), '..');
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
       package: FILE_PACKAGE_NAME,
       protoPath: join(contractsPath, 'proto/file/file.services.proto'),
-      url: '0.0.0.0:50052',
+      url: '0.0.0.0:50054',
       loader: {
-        keepCase: true,
         longs: String,
         enums: String,
         defaults: true,

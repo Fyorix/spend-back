@@ -2,6 +2,7 @@ export interface EnvConfig {
   port: number;
   redisHost: string;
   redisPort: number;
+  jwtSecret: string;
 }
 
 export function loadEnvConfig(): EnvConfig {
@@ -9,6 +10,7 @@ export function loadEnvConfig(): EnvConfig {
     port: parseInt(process.env.PORT ?? '3003', 10),
     redisHost: process.env.REDIS_HOST ?? 'localhost',
     redisPort: parseInt(process.env.REDIS_PORT ?? '6379', 10),
+    jwtSecret: process.env.JWT_SECRET ?? 'dev-jwt-secret',
   };
 }
 
