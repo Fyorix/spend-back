@@ -62,7 +62,7 @@ export class FileService {
     let totalSize = 0;
     let isProcessing = false;
 
-    const processUpload = async (source: 'complete' | 'size-match'): Promise<FileEntity> => {
+    const processUpload = async (_source: 'complete' | 'size-match'): Promise<FileEntity> => {
       const totalBytesReceived = chunks.reduce((sum, c) => sum + c.length, 0);
 
       if (!metadata) {
