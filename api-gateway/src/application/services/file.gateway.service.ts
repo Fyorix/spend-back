@@ -1,6 +1,6 @@
 import { FileServiceClient, UploadFileRequest } from '@clement.pasteau/contracts';
 import { Metadata } from '@grpc/grpc-js';
-import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import type { ClientGrpc } from '@nestjs/microservices';
 import { firstValueFrom, Subject } from 'rxjs';
 
@@ -9,7 +9,6 @@ const CHUNK_SIZE = 64 * 1024;
 @Injectable()
 export class FileGatewayService implements OnModuleInit {
   private fileServiceClient!: FileServiceClient;
-  private readonly logger = new Logger(FileGatewayService.name);
   constructor(@Inject('FILE_PACKAGE') private readonly client: ClientGrpc) {}
 
   onModuleInit() {
@@ -40,13 +39,9 @@ export class FileGatewayService implements OnModuleInit {
       for (let offset = 0; offset < file.buffer.length; offset += CHUNK_SIZE) {
         const chunk = new Uint8Array(file.buffer.slice(offset, offset + CHUNK_SIZE));
         uploadStream.next({ chunk } as UploadFileRequest);
-
-        await new Promise((r) => setImmediate(r));
       }
 
-      this.logger.debug('Calling uploadStream.complete()');
       uploadStream.complete();
-      this.logger.debug('uploadStream.complete() called - stream should close');
     };
 
     const responsePromise = firstValueFrom(response$);
