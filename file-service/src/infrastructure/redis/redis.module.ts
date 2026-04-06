@@ -2,6 +2,7 @@ import { Module, Global } from '@nestjs/common';
 import { REDIS_PUBLISHER, REDIS_SUBSCRIBER } from './redis.constants.js';
 import { loadEnvConfig } from '../../config/env.config.js';
 import { Redis } from 'ioredis';
+import { RedisPubService } from './redis-pub.service.js';
 
 @Global()
 @Module({
@@ -20,7 +21,8 @@ import { Redis } from 'ioredis';
         return new Redis({ host: config.redisHost, port: config.redisPort });
       },
     },
+    RedisPubService,
   ],
-  exports: [REDIS_PUBLISHER, REDIS_SUBSCRIBER],
+  exports: [REDIS_PUBLISHER, REDIS_SUBSCRIBER, RedisPubService],
 })
 export class RedisModule {}

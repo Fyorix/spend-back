@@ -9,6 +9,10 @@ import {
 export class WsEmitterService {
   constructor(private readonly gateway: AppGateway) { }
 
+  emitToUser(userId: string, event: string, payload: unknown): void {
+    this.gateway.server.to(`user_${userId}`).emit(event, payload);
+  }
+
   emitZoneUpdate(payload: ZoneUpdatedPayload): void {
     this.gateway.server.emit('zone-update', payload);
   }

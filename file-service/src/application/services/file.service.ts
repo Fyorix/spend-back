@@ -5,6 +5,10 @@ import { Observable } from 'rxjs';
 import { S3Service } from '../../infrastructure/s3/s3.service.js';
 import * as FilePort from '../../domain/ports/file.repository.js';
 import { UploadFileRequest } from '@clement.pasteau/contracts';
+import { FileEventType, type FileUploadedEvent } from '@clement.pasteau/shared';
+import { RedisPubService } from '../../infrastructure/redis/redis-pub.service.js';
+
+
 
 interface FileMetadata {
   originalName: string;
@@ -50,10 +54,13 @@ const isChunk = (value: unknown): value is Uint8Array => value instanceof Uint8A
 
 @Injectable()
 export class FileService {
+  private readonly FILE_EVENTS_CHANNEL = 'file_events';
+
   constructor(
     private readonly s3Service: S3Service,
     @Inject(FilePort.FILE_REPOSITORY)
     private readonly fileRepository: FilePort.IFileRepository,
+    private readonly redisPubService: RedisPubService,
   ) {}
 
   async uploadFile(userId: string, request$: Observable<UploadFileRequest>): Promise<FileEntity> {
@@ -90,6 +97,15 @@ export class FileService {
         await this.s3Service.putObject(fileEntity.minioKey, buffer, fileEntity.mimeType);
         savedFile.status = FileStatus.COMPLETED;
         await this.fileRepository.save(savedFile);
+
+        const event: FileUploadedEvent = {
+          type: FileEventType.FILE_UPLOADED,
+          payload: {
+            fileId: savedFile.id!,
+            userId: savedFile.userId,
+          },
+        };
+        this.redisPubService.publish(this.FILE_EVENTS_CHANNEL, event);
         return savedFile;
       } catch (error: unknown) {
         savedFile.status = FileStatus.FAILED;

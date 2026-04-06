@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { IEventHandler } from './event-handler.interface.js';
 import { WsEmitterService } from '../../gateway/ws-emitter.service.js';
-import { RedisEvent } from '../../domain/events/redis-event.interface.js';
+import { FileEventType, FileUploadedEvent, WebSocketEvent } from '@clement.pasteau/shared';
 
 @Injectable()
 export class FileEventsHandler implements IEventHandler {
@@ -10,12 +10,17 @@ export class FileEventsHandler implements IEventHandler {
   constructor(private readonly wsEmitter: WsEmitterService) {}
 
   handle(data: unknown): void {
-    const event = data as RedisEvent;
-    if (!event.event || event.payload === undefined) {
+    const event = data as Partial<FileUploadedEvent>;
+    if (!event.type || event.payload === undefined) {
       this.logger.warn('Invalid file event received');
       return;
     }
-    this.logger.debug(`File event [${event.event}]`);
-    this.wsEmitter.broadcast(event.event, event.payload);
+    this.logger.debug(`File event [${event.type}]`);
+
+    if (event.type === FileEventType.FILE_UPLOADED) {
+      const payload = event.payload;
+      this.logger.log(`File uploaded: ${payload.fileId} by user ${payload.userId}`);
+      this.wsEmitter.emitToUser(payload.userId, WebSocketEvent.FILE_UPLOADED, payload);
+    }
   }
 }
