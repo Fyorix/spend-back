@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/require-await */
-import { Controller, Logger, NotImplementedException } from '@nestjs/common';
+import { Controller, Logger, NotImplementedException, UnauthorizedException } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import {
   FILE_SERVICE_NAME,
@@ -9,9 +9,11 @@ import {
   type GetUserFilesRequest,
   type FileListResponse,
 } from '@clement.pasteau/contracts';
+
+import { FileService } from '../services/file.service.js';
 @Controller()
 export class FileQueryController {
-  constructor() { }
+  constructor(private readonly fileService: FileService) {}
 
   @GrpcMethod(FILE_SERVICE_NAME, 'GetFile')
   async getFile(_request: GetFileRequest): Promise<FileResponse> {
@@ -21,7 +23,21 @@ export class FileQueryController {
 
   @GrpcMethod(FILE_SERVICE_NAME, 'GetUserFiles')
   async getUserFiles(_request: GetUserFilesRequest): Promise<FileListResponse> {
-    Logger.log('GET USER FILES NOT IMPLEMENTED');
-    throw new NotImplementedException();
+    const userId = _request.userId;
+    if (!userId) {
+      throw new UnauthorizedException('User ID is missing in context');
+    }
+    const filesEntities = await this.fileService.getUserFiles(userId);
+    return {
+      files: filesEntities.map((fileEntity) => ({
+        id: fileEntity.id?.toString() || '',
+        userId: fileEntity.userId,
+        originalName: fileEntity.originalName,
+        mimeType: fileEntity.mimeType,
+        size: fileEntity.size,
+        minioKey: fileEntity.minioKey,
+        url: '',
+      })),
+    };
   }
 }

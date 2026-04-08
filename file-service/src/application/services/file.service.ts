@@ -200,7 +200,7 @@ export class FileService {
   }
 
   async getUserFiles(_userId: string): Promise<FileEntity[]> {
-    throw new NotImplementedException();
+    return await this.fileRepository.findByUserId(_userId);
   }
 
   async deleteFile(_id: string): Promise<void> {
